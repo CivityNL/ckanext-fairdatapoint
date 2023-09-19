@@ -1,0 +1,14 @@
+# fairdatapoint-js:
+#   filter: rjsmin
+#   output: ckanext-fairdatapoint/%(version)s-fairdatapoint.js
+#   contents:
+#     - js/fairdatapoint.js
+#   extra:
+#     preload:
+#       - base/main
+
+# fairdatapoint-css:
+#   filter: cssrewrite
+#   output: ckanext-fairdatapoint/%(version)s-fairdatapoint.css
+#   contents:
+#     - css/fairdatapoint.css
