@@ -1,0 +1,1 @@
+from ckanext.fairdatapoint.harvesters.fair_data_point_civity_harvester import FairDataPointCivityHarvester

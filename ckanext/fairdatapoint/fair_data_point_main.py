@@ -1,6 +1,5 @@
 # coding: utf8
-import json
-from harvester.domain.fair_data_point_record_provider import FairDataPointRecordProvider
+from ckanext.fairdatapoint.harvesters.domain.fair_data_point_record_provider import FairDataPointRecordProvider
 
 
 def main():

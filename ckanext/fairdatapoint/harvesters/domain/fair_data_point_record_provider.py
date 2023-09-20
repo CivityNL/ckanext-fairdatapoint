@@ -1,8 +1,7 @@
 import logging
-import urllib
 import requests
 
-from ckanext.civity.harvester.domain.record_provider import IRecordProvider
+from ckanext.civity.harvesters.domain.record_provider import IRecordProvider
 
 from rdflib import Graph, Namespace, URIRef
 from rdflib.namespace import RDF
@@ -49,15 +48,15 @@ class FairDataPointRecordProvider(IRecordProvider):
         """
         log.debug('Gisweb get_record_by_id for {}'.format(guid))
 
-        result = self._get_theme(guid)
+        # result = self._get_theme(guid)
+        #
+        # result.theme_metadata = self._get_theme_metadata(guid)
+        #
+        # result.wms_layers = self._get_wms_layers(result.code)
+        #
+        # result.parent_theme_group = self._get_parent_theme_group(self._get_themes().get(guid))
 
-        result.theme_metadata = self._get_theme_metadata(guid)
-
-        result.wms_layers = self._get_wms_layers(result.code)
-
-        result.parent_theme_group = self._get_parent_theme_group(self._get_themes().get(guid))
-
-        return result
+        return ''
 
     def _get_graph(self, path):
         """

@@ -1,6 +1,6 @@
 import logging
 
-from ckanext.civity.harvester.domain.record_to_package_converter import IRecordToPackageConverter
+from ckanext.civity.harvesters.domain.record_to_package_converter import IRecordToPackageConverter
 
 log = logging.getLogger(__name__)
 
