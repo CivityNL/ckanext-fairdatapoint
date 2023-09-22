@@ -2,24 +2,29 @@
 
 # ckanext-fairdatapoint
 
-**TODO:** Put a description of your extension here:  What does it do? What features does it have? Consider including some screenshots or embedding a video!
+CKAN extension for FAIR data points. Contains a harvester for FAIR data points. In the future, the FAIR data point API might be supported by this extension too. 
 
+## Profiles
+
+How the RDF from the FAIR data point is mapped to CKAN packages and resources is determined by so called application profiles. In case of a FAIR data point which uses custom fields, a profile must be created. A profile can be definied as a Python class in the the ckanext.fairdatapoint.profiles.py file. The new profile must be registered in the [ckan.rdf.profiles] section of setup.py. What profile is being used for a particular is determined by the harvester configuration. 
+
+``
+{
+	"profiles": "fairdatapoint_dcat_ap"
+}
+``
 
 ## Requirements
 
-**TODO:** For example, you might want to mention here which versions of CKAN this
-extension works with.
-
-If your extension works across different versions you can add the following table:
-
 Compatibility with core CKAN versions:
 
-| CKAN version    | Compatible?   |
-| --------------- | ------------- |
-| 2.6 and earlier | not tested    |
-| 2.7             | not tested    |
-| 2.8             | not tested    |
-| 2.9             | not tested    |
+| CKAN version    | Compatible? |
+|-----------------|-------------|
+| 2.6 and earlier | not tested  |
+| 2.7             | not tested  |
+| 2.8             | not tested  |
+| 2.9             | yes         |
+| 2.10            | not tested  |
 
 Suggested values:
 

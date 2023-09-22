@@ -87,6 +87,8 @@ setup(
         fairdatapointharvester=ckanext.fairdatapoint.harvesters:FairDataPointCivityHarvester
         fairdatapoint=ckanext.fairdatapoint.plugin:FairdatapointPlugin
         
+        [ckan.rdf.profiles]
+        fairdatapoint_dcat_ap=ckanext.fairdatapoint.profiles:FAIRDataPointDCATAPProfile
         
         [babel.extractors]
         ckan = ckan.lib.extract:extract_ckan

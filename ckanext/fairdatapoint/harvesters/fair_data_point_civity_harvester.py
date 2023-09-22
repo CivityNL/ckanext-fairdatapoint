@@ -3,7 +3,7 @@ from ckanext.fairdatapoint.harvesters.domain.fair_data_point_record_provider imp
 from ckanext.fairdatapoint.harvesters.domain.fair_data_point_record_to_package_converter import \
     FairDataPointRecordToPackageConverter
 
-MAPPING = 'mapping'
+PROFILE = 'profile'
 
 
 class FairDataPointCivityHarvester(CivityHarvester):
@@ -12,14 +12,10 @@ class FairDataPointCivityHarvester(CivityHarvester):
         self.record_provider = FairDataPointRecordProvider(harvest_url)
 
     def setup_record_to_package_converter(self, harvest_url, harvest_config_dict):
-        if MAPPING in harvest_config_dict.keys():
-            self.record_to_package_converter = FairDataPointRecordToPackageConverter(
-                harvest_url,
-                harvest_config_dict.get(MAPPING),
-                self._get_template_package_dict(harvest_config_dict)
-            )
+        if PROFILE in harvest_config_dict.keys():
+            self.record_to_package_converter = FairDataPointRecordToPackageConverter(harvest_config_dict.get(PROFILE))
         else:
-            raise CivityHarvesterException('[{0}] node found in harvester config JSON'.format(MAPPING))
+            raise CivityHarvesterException('[{0}] node found in harvester config JSON'.format(PROFILE))
 
     def info(self):
         return {

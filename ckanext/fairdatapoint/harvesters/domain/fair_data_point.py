@@ -17,22 +17,10 @@ class FairDataPoint:
         have to be added to a trust store. But this is inconvenient in case of a new harvester which refers to an
         endpoint whose certificate is not in the trust store yet.
         """
-        g = Graph().parse(data=self.get_data(path))
+        g = Graph().parse(data=self._get_data(path))
         return g
 
-    @staticmethod
-    def get_value(graph, subject, predicate):
-        result = None
-
-        subject_uri = URIRef(subject)
-        predicate_uri = URIRef(predicate)
-
-        for result in graph.objects(subject=subject_uri, predicate=predicate_uri):
-            break
-
-        return result
-
-    def get_data(self, path):
+    def _get_data(self, path):
         response = requests.request("GET", self._get_uri(path))
         return response.text
 

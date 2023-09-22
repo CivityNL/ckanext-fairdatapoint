@@ -5,11 +5,14 @@ from ckanext.fairdatapoint.harvesters.domain.identifier import Identifier
 
 from ckanext.fairdatapoint.harvesters.domain.fair_data_point import FairDataPoint
 
-from rdflib import Namespace, URIRef
+from rdflib import Namespace, URIRef, Literal
 from rdflib.namespace import RDF
 
-SEPARATOR = '|'
-KEY_VALUE_SEPARATOR = '_'
+DC_TERMS_DESCRIPTION = 'http://purl.org/dc/terms/description'
+DC_TERMS_FORMAT = 'http://purl.org/dc/terms/format'
+DC_TERMS_LICENSE = 'http://purl.org/dc/terms/license'
+DC_TERMS_TITLE = 'http://purl.org/dc/terms/title'
+DCAT_ACCESS_URL = 'http://www.w3.org/ns/dcat#accessURL'
 
 log = logging.getLogger(__name__)
 
@@ -55,16 +58,6 @@ class FairDataPointRecordProvider(IRecordProvider):
 
                 result[identifier.guid] = dataset_uri
 
-                # dataset_graph = self.fair_data_point.get_graph('/dataset/' + dataset_id)
-                # distribution_predicate = URIRef('http://www.w3.org/ns/dcat#distribution')
-                # for distribution_uri in dataset_graph.objects(predicate=distribution_predicate):
-                #     distribution_id = distribution_uri.replace(self.fair_data_point.fdp_end_point + '/distribution/', '')
-                #     result[
-                #         'catalog' + KEY_VALUE_SEPARATOR + catalog_id + SEPARATOR +
-                #         'dataset' + KEY_VALUE_SEPARATOR + dataset_id + SEPARATOR +
-                #         'distribution' + KEY_VALUE_SEPARATOR + dataset_id + SEPARATOR
-                #         ] = distribution_uri
-
         return result.keys()
 
     def get_record_by_id(self, guid):
@@ -75,8 +68,44 @@ class FairDataPointRecordProvider(IRecordProvider):
 
         identifier = Identifier(guid)
 
-        result = self.fair_data_point.get_data('/' + identifier.get_id_type() + '/' + identifier.get_id_value())
-        # g = self.fair_data_point.get_graph('/' + key_value[0] + '/' + key_value[1])
-        # self.fair_data_point.print_graph(g)
+        g = self.fair_data_point.get_graph('/' + identifier.get_id_type() + '/' + identifier.get_id_value())
+
+        subject_uri = URIRef(
+            self.fair_data_point.fdp_end_point + '/' +
+            identifier.get_id_type() + '/' +
+            identifier.get_id_value()
+        )
+
+        distribution_predicate_uri = URIRef('http://www.w3.org/ns/dcat#distribution')
+
+        # Add information from distribution to graph
+        # Lookup resource name (dcterms:title) and resource description (dcterms:description) for Distribution/resource
+        for distribution_uri in g.objects(subject=subject_uri, predicate=distribution_predicate_uri):
+            distribution_id = distribution_uri.replace(self.fair_data_point.fdp_end_point + '/distribution/', '')
+
+            distribution_g = self.fair_data_point.get_graph('/distribution/' + distribution_id)
+
+            distribution = URIRef(distribution_uri)
+
+            for predicate in [
+                DC_TERMS_DESCRIPTION,
+                DC_TERMS_FORMAT,
+                DC_TERMS_LICENSE,
+                DC_TERMS_TITLE,
+                DCAT_ACCESS_URL
+            ]:
+                for literal in self.get_values(distribution_g, distribution_uri, predicate):
+                    g.add((distribution, URIRef(predicate), literal))
+
+        result = g.serialize(format='ttl')
 
         return result
+
+    @staticmethod
+    def get_values(graph, subject, predicate):
+
+        subject_uri = URIRef(subject)
+        predicate_uri = URIRef(predicate)
+
+        for value in graph.objects(subject=subject_uri, predicate=predicate_uri):
+            yield value
