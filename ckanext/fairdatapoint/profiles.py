@@ -10,8 +10,13 @@ class FAIRDataPointDCATAPProfile(EuropeanDCATAP2Profile):
     def parse_dataset(self, dataset_dict, dataset_ref):
         super(FAIRDataPointDCATAPProfile, self).parse_dataset(dataset_dict, dataset_ref)
 
+        print('This was in EXTRAS before being deleted --> {}'.format(dataset_dict['extras']))
+
+        dataset_dict['extras'] = []
+
         # Example of adding a field
-        dataset_dict['extras'].append({'key': 'hello', 'value': "Hello from the FAIR data point profile. Use this function to do FAIR data point specific stuff during the import stage"})
+        dataset_dict['extras'].append({'key': 'hello',
+                                       'value': "Hello from the FAIR data point profile. Use this function to do FAIR data point specific stuff during the import stage"})
 
         return dataset_dict
 
