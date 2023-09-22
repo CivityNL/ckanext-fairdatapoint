@@ -13,6 +13,7 @@ DC_TERMS_FORMAT = 'http://purl.org/dc/terms/format'
 DC_TERMS_LICENSE = 'http://purl.org/dc/terms/license'
 DC_TERMS_TITLE = 'http://purl.org/dc/terms/title'
 DCAT_ACCESS_URL = 'http://www.w3.org/ns/dcat#accessURL'
+VCARD = 'http://www.w3.org/2006/vcard/ns#'
 
 log = logging.getLogger(__name__)
 
@@ -50,6 +51,7 @@ class FairDataPointRecordProvider(IRecordProvider):
             result[identifier.guid] = catalog_subject
 
             catalog_graph = self.fair_data_point.get_graph('/catalog/' + catalog_id)
+
             dataset_predicate = URIRef('http://www.w3.org/ns/dcat#dataset')
             for dataset_uri in catalog_graph.objects(predicate=dataset_predicate):
                 dataset_id = dataset_uri.replace(self.fair_data_point.fdp_end_point + '/dataset/', '')
@@ -79,7 +81,6 @@ class FairDataPointRecordProvider(IRecordProvider):
         distribution_predicate_uri = URIRef('http://www.w3.org/ns/dcat#distribution')
 
         # Add information from distribution to graph
-        # Lookup resource name (dcterms:title) and resource description (dcterms:description) for Distribution/resource
         for distribution_uri in g.objects(subject=subject_uri, predicate=distribution_predicate_uri):
             distribution_id = distribution_uri.replace(self.fair_data_point.fdp_end_point + '/distribution/', '')
 

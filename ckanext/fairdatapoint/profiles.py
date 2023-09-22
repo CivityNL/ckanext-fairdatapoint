@@ -8,11 +8,10 @@ class FAIRDataPointDCATAPProfile(EuropeanDCATAP2Profile):
     """
 
     def parse_dataset(self, dataset_dict, dataset_ref):
-        # call super method
         super(FAIRDataPointDCATAPProfile, self).parse_dataset(dataset_dict, dataset_ref)
 
         # Example of adding a field
-        dataset_dict['extras'].append({'key': 'hello', 'value': "world"})
+        dataset_dict['extras'].append({'key': 'hello', 'value': "Hello from the FAIR data point profile. Use this function to do FAIR data point specific stuff during the import stage"})
 
         return dataset_dict
 
