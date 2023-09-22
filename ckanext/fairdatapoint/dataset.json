@@ -1,56 +1,45 @@
 {
 	"author": {
-		"source": "dataset",
 		"predicate": "",
 		"default": "Default author. If you see this text, the harvest source does not contain author information"
 	},
 	"author_email": {
-		"source": "dataset",
 		"predicate": "",
 		"default": "Default author email. If you see this text, the harvest source does not contain author email information"
 	},
 	"isopen": {
-		"source": "dataset",
 		"predicate": "",
 		"default": "True"
 	},
 	"license_id": {
-		"source": "dataset",
 		"predicate": "",
 		"default": "Default licence ID. If you see this text, the harvest source does not contain license ID information"
 	},
 	"maintainer": {
-		"source": "dataset",
 		"predicate": "",
 		"default": "Default maintainer. If you see this text, the harvest source does not contain maintainer information"
 	},
 	"maintainer_email": {
-		"source": "dataset",
 		"predicate": "",
 		"default": "Default maintainer email. If you see this text, the harvest source does not contain maintainer email information"
 	},
 	"notes": {
-		"source": "dataset",
 		"predicate": "http://purl.org/dc/terms/description",
 		"default": "Default notes. If you see this text, the harvest source does not contain notes information"
 	},
 	"image_url": {
-		"source": "dataset",
 		"predicate": "",
 		"default": "Default image URL. If you see this text, the harvest source does not contain image URL information"
 	},
 	"title": {
-		"source": "dataset",
 		"predicate": "http://purl.org/dc/terms/title",
 		"default": "Default title. If you see this text, the harvest source does not contain title information"
 	},
 	"url": {
-		"source": "dataset",
 		"predicate": "http://www.w3.org/ns/dcat#landingPag",
 		"default": "http://www.example.com"
 	},
 	"version": {
-		"source": "dataset",
 		"predicate": "",
 		"default": "Default version. If you see this text, the harvest source does not contain version information"
 	}

@@ -1,0 +1,47 @@
+SEPARATOR = '|'
+KEY_VALUE_SEPARATOR = '_'
+
+
+class IdentifierException(Exception):
+    pass
+
+
+class Identifier:
+
+    def __init__(self, guid):
+        self.guid = guid
+
+    def add(self, id_type, id_value):
+        if len(self.guid) > 0:
+            self.guid += SEPARATOR
+
+        self.guid += id_type + KEY_VALUE_SEPARATOR + id_value
+
+    def get_id_type(self):
+        return self.get_part(0)
+
+    def get_id_value(self):
+        return self.get_part(1)
+
+    def get_part(self, index):
+        key_values = self.guid.split(SEPARATOR)
+
+        if len(key_values) > 0:
+            # Get the last one, that's the one we are interested in
+            key_value = key_values[len(key_values) - 1].split(KEY_VALUE_SEPARATOR)
+            if len(key_value) == 2:
+                result = key_value[index]
+            else:
+                raise IdentifierException(
+                    'Unexpected number of parts in key_value [{}]: [{}]',
+                    key_values[1],
+                    len(key_value)
+                )
+        else:
+            raise IdentifierException(
+                'Unexpected number of parts in record identifier [{}]: [{}]',
+                self.guid,
+                len(key_values)
+            )
+
+        return result

@@ -13,16 +13,17 @@ def main():
 
     for endpoint in endpoints:
         record_provider = FairDataPointRecordProvider(endpoint)
+
+        record_to_package_converter = FairDataPointRecordToPackageConverter(
+            endpoint,
+            json.load(open('mapping.json')).get('mapping'),
+            json.load(open('template.json'))
+        )
+
         record_ids = record_provider.get_record_ids()
         for record_id in record_ids:
-            if 'catalog' in record_id and 'dataset' in record_id and 'distribution' not in record_id:
-                data = record_provider.get_record_by_id(record_id)
-                record_to_package_converter = FairDataPointRecordToPackageConverter(
-                    endpoint,
-                    json.load(open('dataset.json')),
-                    json.load(open('template.json'))
-                )
-                print(json.dumps(record_to_package_converter.record_to_package(data)))
+            data = record_provider.get_record_by_id(record_id)
+            print(json.dumps(record_to_package_converter.record_to_package(record_id, data)))
 
 
 if __name__ == "__main__":

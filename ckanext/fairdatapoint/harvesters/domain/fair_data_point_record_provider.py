@@ -1,7 +1,7 @@
 import logging
 
-from ckanext.civity.harvesters.domain.record_provider import IRecordProvider
-from ckanext.civity.harvesters.domain.record_provider import RecordProviderException
+from ckanext.civity.harvesters.domain.record_provider import IRecordProvider, RecordProviderException
+from ckanext.fairdatapoint.harvesters.domain.identifier import Identifier
 
 from ckanext.fairdatapoint.harvesters.domain.fair_data_point import FairDataPoint
 
@@ -38,27 +38,32 @@ class FairDataPointRecordProvider(IRecordProvider):
         catalogs_graph = self.fair_data_point.get_graph("/page/catalog")
 
         for catalog_subject in catalogs_graph.subjects(RDF.type, self.dcat.Catalog):
+            identifier = Identifier('')
+
             catalog_id = catalog_subject.replace(self.fair_data_point.fdp_end_point + '/catalog/', '')
-            result['catalog' + KEY_VALUE_SEPARATOR + catalog_id] = catalog_subject
+
+            identifier.add('catalog', catalog_id)
+
+            result[identifier.guid] = catalog_subject
 
             catalog_graph = self.fair_data_point.get_graph('/catalog/' + catalog_id)
             dataset_predicate = URIRef('http://www.w3.org/ns/dcat#dataset')
             for dataset_uri in catalog_graph.objects(predicate=dataset_predicate):
                 dataset_id = dataset_uri.replace(self.fair_data_point.fdp_end_point + '/dataset/', '')
-                result[
-                    'catalog' + KEY_VALUE_SEPARATOR + catalog_id + SEPARATOR +
-                    'dataset' + KEY_VALUE_SEPARATOR + dataset_id
-                    ] = dataset_uri
 
-                dataset_graph = self.fair_data_point.get_graph('/dataset/' + dataset_id)
-                distribution_predicate = URIRef('http://www.w3.org/ns/dcat#distribution')
-                for distribution_uri in dataset_graph.objects(predicate=distribution_predicate):
-                    distribution_id = distribution_uri.replace(self.fair_data_point.fdp_end_point + '/distribution/', '')
-                    result[
-                        'catalog' + KEY_VALUE_SEPARATOR + catalog_id + SEPARATOR +
-                        'dataset' + KEY_VALUE_SEPARATOR + dataset_id + SEPARATOR +
-                        'distribution' + KEY_VALUE_SEPARATOR + dataset_id + SEPARATOR
-                        ] = distribution_uri
+                identifier.add('dataset', dataset_id)
+
+                result[identifier.guid] = dataset_uri
+
+                # dataset_graph = self.fair_data_point.get_graph('/dataset/' + dataset_id)
+                # distribution_predicate = URIRef('http://www.w3.org/ns/dcat#distribution')
+                # for distribution_uri in dataset_graph.objects(predicate=distribution_predicate):
+                #     distribution_id = distribution_uri.replace(self.fair_data_point.fdp_end_point + '/distribution/', '')
+                #     result[
+                #         'catalog' + KEY_VALUE_SEPARATOR + catalog_id + SEPARATOR +
+                #         'dataset' + KEY_VALUE_SEPARATOR + dataset_id + SEPARATOR +
+                #         'distribution' + KEY_VALUE_SEPARATOR + dataset_id + SEPARATOR
+                #         ] = distribution_uri
 
         return result.keys()
 
@@ -68,25 +73,10 @@ class FairDataPointRecordProvider(IRecordProvider):
         """
         log.debug('FAIR data point get_record_by_id from {} for {}'.format(self.fair_data_point.fdp_end_point, guid))
 
-        key_values = guid.split(SEPARATOR)
-        if len(key_values) > 0:
-            # Get the last one, that's the one we are interested in
-            key_value = key_values[len(key_values) - 1].split(KEY_VALUE_SEPARATOR)
-            if len(key_value) == 2:
-                result = self.fair_data_point.get_data('/' + key_value[0] + '/' + key_value[1])
-                # g = self.fair_data_point.get_graph('/' + key_value[0] + '/' + key_value[1])
-                # self.fair_data_point.print_graph(g)
-            else:
-                raise FairDataPointRecordProviderException(
-                    'Unexpected number of parts in key_value [{}]: [{}]',
-                    key_values[1],
-                    len(key_value)
-                )
-        else:
-            raise FairDataPointRecordProviderException(
-                'Unexpected number of parts in record identifier [{}]: [{}]',
-                guid,
-                len(key_values)
-            )
+        identifier = Identifier(guid)
+
+        result = self.fair_data_point.get_data('/' + identifier.get_id_type() + '/' + identifier.get_id_value())
+        # g = self.fair_data_point.get_graph('/' + key_value[0] + '/' + key_value[1])
+        # self.fair_data_point.print_graph(g)
 
         return result
