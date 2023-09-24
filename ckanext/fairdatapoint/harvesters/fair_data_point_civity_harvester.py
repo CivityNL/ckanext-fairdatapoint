@@ -12,10 +12,10 @@ class FairDataPointCivityHarvester(CivityHarvester):
         self.record_provider = FairDataPointRecordProvider(harvest_url)
 
     def setup_record_to_package_converter(self, harvest_url, harvest_config_dict):
-        if PROFILE in harvest_config_dict.keys():
+        if PROFILE in harvest_config_dict:
             self.record_to_package_converter = FairDataPointRecordToPackageConverter(harvest_config_dict.get(PROFILE))
         else:
-            raise CivityHarvesterException('[{0}] node found in harvester config JSON'.format(PROFILE))
+            raise CivityHarvesterException('[{0}] not found in harvester config JSON'.format(PROFILE))
 
     def info(self):
         return {
