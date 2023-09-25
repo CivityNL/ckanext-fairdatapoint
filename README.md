@@ -4,9 +4,12 @@
 
 CKAN extension for FAIR data points. Contains a harvester for FAIR data points. In the future, the FAIR data point API might be supported by this extension too. 
 
-## Profiles
+## Stages
 
-How the RDF from the FAIR data point is mapped to CKAN packages and resources is determined by so called application profiles. In case of a FAIR data point which uses custom fields, a profile must be created. A profile can be definied as a Python class in the the ckanext.fairdatapoint.profiles.py file. The new profile must be registered in the [ckan.rdf.profiles] section of setup.py. What profile is being used for a particular is determined by the harvester configuration. 
+The harvester runs in three stages. Each of these stages can be modified.
+ 1. Gather stage. The gather stage uses the FairDataPointRecordProvider which implements the IRecordProvider interface to create a list of identifiers of the objects which should be included in the harvest. In case of a FAIR datab point, this list inlcudes catalogs and datasets. In the future, collections could be added;
+ 2. Fetch stage. The fetch stage downloads the actual source data. In this phase, additional data from other sources may be included to better suit the DCAT profile as expected by CKAN;
+ 3. Import stage. The import stage does the actual import. How the RDF from the FAIR data point is mapped to CKAN packages and resources is determined by so called application profiles. In case of a FAIR data point which uses custom fields, a profile must be created. A profile can be definied as a Python class in the the ckanext.fairdatapoint.profiles.py file. The new profile must be registered in the [ckan.rdf.profiles] section of setup.py. What profile is being used for a particular is determined by the harvester configuration. 
 
 ``
 {
