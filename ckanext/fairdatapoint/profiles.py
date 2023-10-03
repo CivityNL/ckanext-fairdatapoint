@@ -1,4 +1,3 @@
-from rdflib.namespace import Namespace
 from ckanext.dcat.profiles import EuropeanDCATAP2Profile
 
 

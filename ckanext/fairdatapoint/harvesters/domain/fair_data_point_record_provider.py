@@ -1,5 +1,7 @@
 import logging
 
+import requests
+
 from ckanext.civity.harvesters.domain.record_provider import IRecordProvider, RecordProviderException
 from ckanext.fairdatapoint.harvesters.domain.identifier import Identifier
 
@@ -13,7 +15,7 @@ DC_TERMS_FORMAT = 'http://purl.org/dc/terms/format'
 DC_TERMS_LICENSE = 'http://purl.org/dc/terms/license'
 DC_TERMS_TITLE = 'http://purl.org/dc/terms/title'
 DCAT_ACCESS_URL = 'http://www.w3.org/ns/dcat#accessURL'
-VCARD = 'http://www.w3.org/2006/vcard/ns#'
+DCAT_CONTACT_POINT = 'http://www.w3.org/ns/dcat#contactPoint'
 
 log = logging.getLogger(__name__)
 
@@ -98,13 +100,21 @@ class FairDataPointRecordProvider(IRecordProvider):
                 for literal in self.get_values(distribution_g, distribution_uri, predicate):
                     g.add((distribution, URIRef(predicate), literal))
 
+        # Look-up contact information
+        contact_point_predicate_uri = URIRef(DCAT_CONTACT_POINT)
+        for orcid_uri in self.get_values(g, subject_uri, contact_point_predicate_uri):
+            orcid_response = requests.get(orcid_uri + '/public-record.json')
+            json_orcid_response = orcid_response.json()
+            name = json_orcid_response['displayName']
+            name_literal = Literal(name)
+            g.add((subject_uri, URIRef('http://www.w3.org/2006/vcard/ns#fn'), name_literal))
+
         result = g.serialize(format='ttl')
 
         return result
 
     @staticmethod
     def get_values(graph, subject, predicate):
-
         subject_uri = URIRef(subject)
         predicate_uri = URIRef(predicate)
 

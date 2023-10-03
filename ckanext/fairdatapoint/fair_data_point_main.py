@@ -14,7 +14,7 @@ def main():
         record_ids = record_provider.get_record_ids()
         for record_id in record_ids:
             data = record_provider.get_record_by_id(record_id)
-            print(data)
+            # print(data)
 
 
 if __name__ == "__main__":
