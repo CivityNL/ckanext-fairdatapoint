@@ -41,28 +41,39 @@ class FairDataPointRecordProvider(IRecordProvider):
 
         result = dict()
 
-        catalogs_graph = self.fair_data_point.get_graph("/page/catalog")
+        fdp_graph = self.fair_data_point.get_graph(self.fair_data_point.fdp_end_point)
+
+        contains_predicate = URIRef('http://www.w3.org/ns/ldp#contains')
+        for contains_object in fdp_graph.objects(predicate=contains_predicate):
+            result.update(self._process_catalog(str(contains_object)))
+
+        return result.keys()
+
+    def _process_catalog(self, path):
+        result = dict()
+
+        catalogs_graph = self.fair_data_point.get_graph(path)
 
         for catalog_subject in catalogs_graph.subjects(RDF.type, self.dcat.Catalog):
             identifier = Identifier('')
 
-            catalog_id = catalog_subject.replace(self.fair_data_point.fdp_end_point + '/catalog/', '')
-
-            identifier.add('catalog', catalog_id)
+            identifier.add('catalog', str(catalog_subject))
 
             result[identifier.guid] = catalog_subject
 
-            catalog_graph = self.fair_data_point.get_graph('/catalog/' + catalog_id)
+            catalog_graph = self.fair_data_point.get_graph(catalog_subject)
 
             dataset_predicate = URIRef('http://www.w3.org/ns/dcat#dataset')
-            for dataset_uri in catalog_graph.objects(predicate=dataset_predicate):
-                dataset_id = dataset_uri.replace(self.fair_data_point.fdp_end_point + '/dataset/', '')
+            for dataset_subject in catalog_graph.objects(predicate=dataset_predicate):
+                identifier = Identifier('')
 
-                identifier.add('dataset', dataset_id)
+                identifier.add('catalog', str(catalog_subject))
 
-                result[identifier.guid] = dataset_uri
+                identifier.add('dataset', str(dataset_subject))
 
-        return result.keys()
+                result[identifier.guid] = dataset_subject
+
+        return result
 
     def get_record_by_id(self, guid):
         """
@@ -72,21 +83,17 @@ class FairDataPointRecordProvider(IRecordProvider):
 
         identifier = Identifier(guid)
 
-        g = self.fair_data_point.get_graph('/' + identifier.get_id_type() + '/' + identifier.get_id_value())
+        subject_url = identifier.get_id_value()
 
-        subject_uri = URIRef(
-            self.fair_data_point.fdp_end_point + '/' +
-            identifier.get_id_type() + '/' +
-            identifier.get_id_value()
-        )
+        g = self.fair_data_point.get_graph(subject_url)
+
+        subject_uri = URIRef(subject_url)
 
         distribution_predicate_uri = URIRef('http://www.w3.org/ns/dcat#distribution')
 
         # Add information from distribution to graph
         for distribution_uri in g.objects(subject=subject_uri, predicate=distribution_predicate_uri):
-            distribution_id = distribution_uri.replace(self.fair_data_point.fdp_end_point + '/distribution/', '')
-
-            distribution_g = self.fair_data_point.get_graph('/distribution/' + distribution_id)
+            distribution_g = self.fair_data_point.get_graph(distribution_uri)
 
             distribution = URIRef(distribution_uri)
 
@@ -102,12 +109,14 @@ class FairDataPointRecordProvider(IRecordProvider):
 
         # Look-up contact information
         contact_point_predicate_uri = URIRef(DCAT_CONTACT_POINT)
-        for orcid_uri in self.get_values(g, subject_uri, contact_point_predicate_uri):
-            orcid_response = requests.get(orcid_uri + '/public-record.json')
-            json_orcid_response = orcid_response.json()
-            name = json_orcid_response['displayName']
-            name_literal = Literal(name)
-            g.add((subject_uri, URIRef('http://www.w3.org/2006/vcard/ns#fn'), name_literal))
+        for contact_point_uri in self.get_values(g, subject_uri, contact_point_predicate_uri):
+            if 'orcid' in contact_point_uri:
+                orcid_response = requests.get(contact_point_uri + '/public-record.json')
+                json_orcid_response = orcid_response.json()
+                name = json_orcid_response['displayName']
+                name_literal = Literal(name)
+                g.add((subject_uri, URIRef('http://www.w3.org/2006/vcard/ns#fn'), name_literal))
+                # TODO add original Orcid URL in a field
 
         result = g.serialize(format='ttl')
 

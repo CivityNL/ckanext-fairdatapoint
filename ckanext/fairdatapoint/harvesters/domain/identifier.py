@@ -1,5 +1,5 @@
-SEPARATOR = '|'
-KEY_VALUE_SEPARATOR = '_'
+SEPARATOR = ';'
+KEY_VALUE_SEPARATOR = '='
 
 
 class IdentifierException(Exception):
