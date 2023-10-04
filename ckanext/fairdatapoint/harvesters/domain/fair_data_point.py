@@ -1,7 +1,7 @@
 import requests
 
 from rdflib import Graph, Namespace, URIRef
-from rdflib.namespace import RDF
+from rdflib.exceptions import ParserError
 
 
 class FairDataPoint:
@@ -16,7 +16,11 @@ class FairDataPoint:
         have to be added to a trust store. But this is inconvenient in case of a new harvester which refers to an
         endpoint whose certificate is not in the trust store yet.
         """
-        g = Graph().parse(data=self._get_data(path))
+        try:
+            g = Graph().parse(data=self._get_data(path))
+        except ParserError as e:
+            g = None
+
         return g
 
     @staticmethod

@@ -7,6 +7,7 @@ def main():
     # endpoints = ['https://fair.healthinformationportal.eu', 'https://health-ri.sandbox.semlab-leiden.nl']
 
     endpoints = [
+        'https://fair.healthinformationportal.eu',
         'https://health-ri.sandbox.semlab-leiden.nl/',
         'https://portal-gdi-nl.molgeniscloud.org/api/fdp/'
     ]

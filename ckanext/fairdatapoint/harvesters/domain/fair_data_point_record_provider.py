@@ -9,6 +9,7 @@ from ckanext.fairdatapoint.harvesters.domain.fair_data_point import FairDataPoin
 
 from rdflib import Namespace, URIRef, Literal
 from rdflib.namespace import RDF
+from rdflib.exceptions import ParserError
 
 DC_TERMS_DESCRIPTION = 'http://purl.org/dc/terms/description'
 DC_TERMS_FORMAT = 'http://purl.org/dc/terms/format'
@@ -54,24 +55,25 @@ class FairDataPointRecordProvider(IRecordProvider):
 
         catalogs_graph = self.fair_data_point.get_graph(path)
 
-        for catalog_subject in catalogs_graph.subjects(RDF.type, self.dcat.Catalog):
-            identifier = Identifier('')
-
-            identifier.add('catalog', str(catalog_subject))
-
-            result[identifier.guid] = catalog_subject
-
-            catalog_graph = self.fair_data_point.get_graph(catalog_subject)
-
-            dataset_predicate = URIRef('http://www.w3.org/ns/dcat#dataset')
-            for dataset_subject in catalog_graph.objects(predicate=dataset_predicate):
+        if catalogs_graph is not None:
+            for catalog_subject in catalogs_graph.subjects(RDF.type, self.dcat.Catalog):
                 identifier = Identifier('')
 
                 identifier.add('catalog', str(catalog_subject))
 
-                identifier.add('dataset', str(dataset_subject))
+                result[identifier.guid] = catalog_subject
 
-                result[identifier.guid] = dataset_subject
+                catalog_graph = self.fair_data_point.get_graph(catalog_subject)
+
+                dataset_predicate = URIRef('http://www.w3.org/ns/dcat#dataset')
+                for dataset_subject in catalog_graph.objects(predicate=dataset_predicate):
+                    identifier = Identifier('')
+
+                    identifier.add('catalog', str(catalog_subject))
+
+                    identifier.add('dataset', str(dataset_subject))
+
+                    result[identifier.guid] = dataset_subject
 
         return result
 
