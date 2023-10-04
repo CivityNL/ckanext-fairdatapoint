@@ -1,6 +1,6 @@
 import requests
 
-from rdflib import Graph, Namespace, URIRef
+from rdflib import Graph
 from rdflib.exceptions import ParserError
 
 

@@ -9,14 +9,18 @@ from ckanext.fairdatapoint.harvesters.domain.fair_data_point import FairDataPoin
 
 from rdflib import Namespace, URIRef, Literal
 from rdflib.namespace import RDF
-from rdflib.exceptions import ParserError
 
-DC_TERMS_DESCRIPTION = 'http://purl.org/dc/terms/description'
-DC_TERMS_FORMAT = 'http://purl.org/dc/terms/format'
-DC_TERMS_LICENSE = 'http://purl.org/dc/terms/license'
-DC_TERMS_TITLE = 'http://purl.org/dc/terms/title'
-DCAT_ACCESS_URL = 'http://www.w3.org/ns/dcat#accessURL'
-DCAT_CONTACT_POINT = 'http://www.w3.org/ns/dcat#contactPoint'
+DC_TERMS = 'http://purl.org/dc/terms/'
+DC_TERMS_DESCRIPTION = DC_TERMS + 'description'
+DC_TERMS_FORMAT = DC_TERMS + 'format'
+DC_TERMS_LICENSE = DC_TERMS + 'license'
+DC_TERMS_TITLE = DC_TERMS + 'title'
+
+DCAT = 'http://www.w3.org/ns/dcat#'
+DCAT_ACCESS_URL = DCAT + 'accessURL'
+DCAT_CONTACT_POINT = DCAT + 'contactPoint'
+
+LDP = 'http://www.w3.org/ns/ldp#'
 
 log = logging.getLogger(__name__)
 
@@ -26,8 +30,8 @@ class FairDataPointRecordProviderException(RecordProviderException):
 
 
 class FairDataPointRecordProvider(IRecordProvider):
-    dcat = Namespace('http://www.w3.org/ns/dcat#')
-    ldp = Namespace('http://www.w3.org/ns/ldp#')
+    dcat = Namespace(DCAT)
+    ldp = Namespace(LDP)
 
     def __init__(self, fdp_end_point):
         IRecordProvider.__init__(self)
@@ -44,7 +48,7 @@ class FairDataPointRecordProvider(IRecordProvider):
 
         fdp_graph = self.fair_data_point.get_graph(self.fair_data_point.fdp_end_point)
 
-        contains_predicate = URIRef('http://www.w3.org/ns/ldp#contains')
+        contains_predicate = URIRef(LDP + 'contains')
         for contains_object in fdp_graph.objects(predicate=contains_predicate):
             result.update(self._process_catalog(str(contains_object)))
 
@@ -65,7 +69,7 @@ class FairDataPointRecordProvider(IRecordProvider):
 
                 catalog_graph = self.fair_data_point.get_graph(catalog_subject)
 
-                dataset_predicate = URIRef('http://www.w3.org/ns/dcat#dataset')
+                dataset_predicate = URIRef(DCAT + 'dataset')
                 for dataset_subject in catalog_graph.objects(predicate=dataset_predicate):
                     identifier = Identifier('')
 
@@ -91,7 +95,7 @@ class FairDataPointRecordProvider(IRecordProvider):
 
         subject_uri = URIRef(subject_url)
 
-        distribution_predicate_uri = URIRef('http://www.w3.org/ns/dcat#distribution')
+        distribution_predicate_uri = URIRef(DCAT + 'distribution')
 
         # Add information from distribution to graph
         for distribution_uri in g.objects(subject=subject_uri, predicate=distribution_predicate_uri):
