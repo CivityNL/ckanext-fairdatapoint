@@ -10,12 +10,17 @@ from ckanext.fairdatapoint.harvesters.domain.fair_data_point import FairDataPoin
 from rdflib import Namespace, URIRef, Literal
 from rdflib.namespace import RDF
 
-DC_TERMS_DESCRIPTION = 'http://purl.org/dc/terms/description'
-DC_TERMS_FORMAT = 'http://purl.org/dc/terms/format'
-DC_TERMS_LICENSE = 'http://purl.org/dc/terms/license'
-DC_TERMS_TITLE = 'http://purl.org/dc/terms/title'
-DCAT_ACCESS_URL = 'http://www.w3.org/ns/dcat#accessURL'
-DCAT_CONTACT_POINT = 'http://www.w3.org/ns/dcat#contactPoint'
+DC_TERMS = 'http://purl.org/dc/terms/'
+DC_TERMS_DESCRIPTION = DC_TERMS + 'description'
+DC_TERMS_FORMAT = DC_TERMS + 'format'
+DC_TERMS_LICENSE = DC_TERMS + 'license'
+DC_TERMS_TITLE = DC_TERMS + 'title'
+
+DCAT = 'http://www.w3.org/ns/dcat#'
+DCAT_ACCESS_URL = DCAT + 'accessURL'
+DCAT_CONTACT_POINT = DCAT + 'contactPoint'
+
+LDP = 'http://www.w3.org/ns/ldp#'
 
 log = logging.getLogger(__name__)
 
@@ -25,8 +30,8 @@ class FairDataPointRecordProviderException(RecordProviderException):
 
 
 class FairDataPointRecordProvider(IRecordProvider):
-    dcat = Namespace('http://www.w3.org/ns/dcat#')
-    ldp = Namespace('http://www.w3.org/ns/ldp#')
+    dcat = Namespace(DCAT)
+    ldp = Namespace(LDP)
 
     def __init__(self, fdp_end_point):
         IRecordProvider.__init__(self)
@@ -41,28 +46,40 @@ class FairDataPointRecordProvider(IRecordProvider):
 
         result = dict()
 
-        catalogs_graph = self.fair_data_point.get_graph("/page/catalog")
+        fdp_graph = self.fair_data_point.get_graph(self.fair_data_point.fdp_end_point)
 
-        for catalog_subject in catalogs_graph.subjects(RDF.type, self.dcat.Catalog):
-            identifier = Identifier('')
-
-            catalog_id = catalog_subject.replace(self.fair_data_point.fdp_end_point + '/catalog/', '')
-
-            identifier.add('catalog', catalog_id)
-
-            result[identifier.guid] = catalog_subject
-
-            catalog_graph = self.fair_data_point.get_graph('/catalog/' + catalog_id)
-
-            dataset_predicate = URIRef('http://www.w3.org/ns/dcat#dataset')
-            for dataset_uri in catalog_graph.objects(predicate=dataset_predicate):
-                dataset_id = dataset_uri.replace(self.fair_data_point.fdp_end_point + '/dataset/', '')
-
-                identifier.add('dataset', dataset_id)
-
-                result[identifier.guid] = dataset_uri
+        contains_predicate = URIRef(LDP + 'contains')
+        for contains_object in fdp_graph.objects(predicate=contains_predicate):
+            result.update(self._process_catalog(str(contains_object)))
 
         return result.keys()
+
+    def _process_catalog(self, path):
+        result = dict()
+
+        catalogs_graph = self.fair_data_point.get_graph(path)
+
+        if catalogs_graph is not None:
+            for catalog_subject in catalogs_graph.subjects(RDF.type, self.dcat.Catalog):
+                identifier = Identifier('')
+
+                identifier.add('catalog', str(catalog_subject))
+
+                result[identifier.guid] = catalog_subject
+
+                catalog_graph = self.fair_data_point.get_graph(catalog_subject)
+
+                dataset_predicate = URIRef(DCAT + 'dataset')
+                for dataset_subject in catalog_graph.objects(predicate=dataset_predicate):
+                    identifier = Identifier('')
+
+                    identifier.add('catalog', str(catalog_subject))
+
+                    identifier.add('dataset', str(dataset_subject))
+
+                    result[identifier.guid] = dataset_subject
+
+        return result
 
     def get_record_by_id(self, guid):
         """
@@ -72,21 +89,17 @@ class FairDataPointRecordProvider(IRecordProvider):
 
         identifier = Identifier(guid)
 
-        g = self.fair_data_point.get_graph('/' + identifier.get_id_type() + '/' + identifier.get_id_value())
+        subject_url = identifier.get_id_value()
 
-        subject_uri = URIRef(
-            self.fair_data_point.fdp_end_point + '/' +
-            identifier.get_id_type() + '/' +
-            identifier.get_id_value()
-        )
+        g = self.fair_data_point.get_graph(subject_url)
 
-        distribution_predicate_uri = URIRef('http://www.w3.org/ns/dcat#distribution')
+        subject_uri = URIRef(subject_url)
+
+        distribution_predicate_uri = URIRef(DCAT + 'distribution')
 
         # Add information from distribution to graph
         for distribution_uri in g.objects(subject=subject_uri, predicate=distribution_predicate_uri):
-            distribution_id = distribution_uri.replace(self.fair_data_point.fdp_end_point + '/distribution/', '')
-
-            distribution_g = self.fair_data_point.get_graph('/distribution/' + distribution_id)
+            distribution_g = self.fair_data_point.get_graph(distribution_uri)
 
             distribution = URIRef(distribution_uri)
 
@@ -102,12 +115,14 @@ class FairDataPointRecordProvider(IRecordProvider):
 
         # Look-up contact information
         contact_point_predicate_uri = URIRef(DCAT_CONTACT_POINT)
-        for orcid_uri in self.get_values(g, subject_uri, contact_point_predicate_uri):
-            orcid_response = requests.get(orcid_uri + '/public-record.json')
-            json_orcid_response = orcid_response.json()
-            name = json_orcid_response['displayName']
-            name_literal = Literal(name)
-            g.add((subject_uri, URIRef('http://www.w3.org/2006/vcard/ns#fn'), name_literal))
+        for contact_point_uri in self.get_values(g, subject_uri, contact_point_predicate_uri):
+            if 'orcid' in contact_point_uri:
+                orcid_response = requests.get(contact_point_uri + '/public-record.json')
+                json_orcid_response = orcid_response.json()
+                name = json_orcid_response['displayName']
+                name_literal = Literal(name)
+                g.add((subject_uri, URIRef('http://www.w3.org/2006/vcard/ns#fn'), name_literal))
+                # TODO add original Orcid URL in a field
 
         result = g.serialize(format='ttl')
 
