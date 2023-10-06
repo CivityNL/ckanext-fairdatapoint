@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from rdflib import Graph
+from rdflib import Graph, URIRef
 
 import requests
 
@@ -12,6 +12,8 @@ class LabelLookupException(Exception):
 
 
 class ILabelLookup:
+
+    pref_label_predicate = URIRef('http://www.w3.org/2004/02/skos/core#prefLabel')
 
     def __init__(self):
         pass
@@ -35,6 +37,16 @@ class ILabelLookup:
         }
         response = requests.request("GET", path, headers=headers)
         return response.text
+
+    def extract_result(self, g, subject_uri, language):
+        result = []
+
+        subject_uri = URIRef(subject_uri.replace('https', 'http'))
+        for pref_label_literal in g.objects(subject=subject_uri, predicate=self.pref_label_predicate):
+            if language.lower() == pref_label_literal.language.lower():
+                result.append(pref_label_literal.value)
+
+        return ", ".join(result)
 
     @staticmethod
     def print_graph(g):
