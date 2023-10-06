@@ -4,15 +4,11 @@ from rdflib import URIRef
 
 class BiontologyLabelLookup(ILabelLookup):
 
-    pref_label_uri = URIRef('http://data.bioontology.org/metadata/skosprefLabel')
+    alternative_pref_label_predicate = URIRef('http://data.bioontology.org/metadata/skosprefLabel')
 
     def get_label(self, url, language):
-        result = []
-
         g = self.get_graph(url, 'application/ld+json', 'json-ld')
+        return self.extract_result_without_language(g, url)
 
-        subject_uri = URIRef(url)
-        for pref_label_literal in g.objects(subject=subject_uri, predicate=self.pref_label_uri):
-            result.append(pref_label_literal.value)
-
-        return ", ".join(result)
+    def get_pref_label_predicate(self):
+        return self.alternative_pref_label_predicate
