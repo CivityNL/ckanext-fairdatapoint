@@ -17,6 +17,18 @@ The harvester runs in three stages. Each of these stages can be modified.
 }
 ``
 
+To run the harvester from the command line:
+
+``
+ckan --config=<full path to CKAN ini-file> harvester run-test <id of harvester>
+``
+
+To rebuiod the index in case it is not automatically update after clearing all packages from a harvester:
+
+``
+ckan --config=<full path to CKAN ini-file> search-index rebuild
+``
+
 ## Requirements
 
 Compatibility with core CKAN versions:
