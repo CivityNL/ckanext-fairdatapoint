@@ -2,9 +2,7 @@ import logging
 
 import requests
 
-from ckanext.civity.harvesters.domain.record_provider import IRecordProvider, RecordProviderException
 from ckanext.fairdatapoint.harvesters.domain.identifier import Identifier
-
 from ckanext.fairdatapoint.harvesters.domain.fair_data_point import FairDataPoint
 
 from rdflib import Namespace, URIRef, Literal
@@ -25,16 +23,14 @@ LDP = 'http://www.w3.org/ns/ldp#'
 log = logging.getLogger(__name__)
 
 
-class FairDataPointRecordProviderException(RecordProviderException):
-    pass
 
 
-class FairDataPointRecordProvider(IRecordProvider):
+
+class FairDataPointRecordProvider():
     dcat = Namespace(DCAT)
     ldp = Namespace(LDP)
 
     def __init__(self, fdp_end_point):
-        IRecordProvider.__init__(self)
         self.fair_data_point = FairDataPoint(fdp_end_point)
 
     def get_record_ids(self):
