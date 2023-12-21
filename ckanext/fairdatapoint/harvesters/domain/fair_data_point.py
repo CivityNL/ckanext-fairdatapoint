@@ -30,11 +30,3 @@ class FairDataPoint:
         }
         response = requests.request("GET", path, headers=headers)
         return response.text
-
-    @staticmethod
-    def print_graph(g):
-        for prefix, ns in g.namespaces():
-            print(prefix, ns)
-
-        for s, p, o in g:
-            print(s, ' - ', p, ' - ', o)
