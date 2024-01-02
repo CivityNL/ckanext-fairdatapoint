@@ -54,10 +54,11 @@ class TestFairDataPoint:
 
     @pytest.mark.xfail(raises=ValueError)
     def test_fdp_get_graph_pass_none(self, mocker):
-        fdp_get_data = mocker.MagicMock(name="get_data")
-        mocker.patch("ckanext.fairdatapoint.harvesters.domain.fair_data_point.FairDataPoint._get_data",
-                     new=fdp_get_data)
-        fdp_get_data.return_value = None
-        fdp = FairDataPoint("some endpoint")
-        actual = fdp.get_graph("some_path")
-        assert fdp_get_data.call_count == 1
+        with pytest.raises(ValueError):
+            fdp_get_data = mocker.MagicMock(name="get_data")
+            mocker.patch("ckanext.fairdatapoint.harvesters.domain.fair_data_point.FairDataPoint._get_data",
+                         new=fdp_get_data)
+            fdp_get_data.return_value = None
+            fdp = FairDataPoint("some endpoint")
+            actual = fdp.get_graph("some_path")
+            assert fdp_get_data.call_count == 1
