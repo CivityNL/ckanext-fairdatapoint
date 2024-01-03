@@ -1,4 +1,5 @@
 import pytest
+import requests_mock
 from pytest_mock import class_mocker, mocker
 from rdflib import Graph, URIRef
 from ckanext.fairdatapoint.harvesters.domain.fair_data_point_record_provider import FairDataPointRecordProvider
@@ -76,5 +77,18 @@ class TestRecordProvider:
                 "dataset=https://health-ri.sandbox.semlab-leiden.nl/dataset/d7129d28-b72a-437f-8db0-4f0258dd3c25")
         fdp_get_graph.side_effect = get_graph_by_id
         actual = self.fdp_record_provider.get_record_by_id(guid)
-        expected = Graph().parse(f"./ckanext-fairdatapoint/ckanext/fairdatapoint/tests/test_data/dataset_d7129d28-b72a-437f-8db0-4f0258dd3c25_out.ttl").serialize()
+        expected = Graph().parse("./ckanext-fairdatapoint/ckanext/fairdatapoint/tests/test_data/dataset_d7129d28-b72a-437f-8db0-4f0258dd3c25_out.ttl").serialize()
         assert actual == expected
+
+    def test_orcid_call(self, mocker):
+        with requests_mock.Mocker() as mock:
+            mock.get("https://orcid.org/0000-0002-4348-707X/public-record.json", json={"displayName": "N.K. De Vries"})
+            fdp_get_graph = mocker.MagicMock(name="get_data")
+            mocker.patch("ckanext.fairdatapoint.harvesters.domain.fair_data_point.FairDataPoint.get_graph",
+                         new=fdp_get_graph)
+            guid = ("catalog=https://covid19initiatives.health-ri.nl/p/ProjectOverview?focusarea=http://purl.org/zonmw/generic/10006;"
+                    "dataset=https://covid19initiatives.health-ri.nl/p/Project/27866022694497978")
+            fdp_get_graph.side_effect = get_graph_by_id
+            actual = self.fdp_record_provider.get_record_by_id(guid)
+            expected = Graph().parse("./ckanext-fairdatapoint/ckanext/fairdatapoint/tests/test_data/Project_27866022694497978_out.ttl").serialize()
+            assert actual == expected
