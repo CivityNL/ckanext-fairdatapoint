@@ -34,7 +34,8 @@ class TestRecordProvider:
 
     @pytest.mark.parametrize("fdp_response_file,expected",
                          [
-                             ("./ckanext/fairdatapoint/tests/test_data/root_fdp_response.ttl", TEST_CAT_IDS_DICT.keys()),
+                             ("./ckanext/fairdatapoint/tests/test_data/root_fdp_response.ttl",
+                              TEST_CAT_IDS_DICT.keys()),
                              ("./ckanext/fairdatapoint/tests/test_data/root_fdp_response_no_catalogs.ttl",
                               dict().keys())
                           ])
@@ -65,7 +66,8 @@ class TestRecordProvider:
                 "dataset=https://fair.healthinformationportal.eu/dataset/898ca4b8-197b-4d40-bc81-d9cd88197670")
         fdp_get_graph.side_effect = get_graph_by_id
         actual = self.fdp_record_provider.get_record_by_id(guid)
-        expected = Graph().parse(f"./ckanext-fairdatapoint/ckanext/fairdatapoint/tests/test_data/dataset_898ca4b8-197b-4d40-bc81-d9cd88197670.ttl").serialize()
+        expected = Graph().parse(f"./ckanext-fairdatapoint/ckanext/fairdatapoint/tests/test_data/"
+                                 f"dataset_898ca4b8-197b-4d40-bc81-d9cd88197670.ttl").serialize()
         assert actual == expected
 
     def test_get_record_by_id_distr(self, mocker):
@@ -77,18 +79,24 @@ class TestRecordProvider:
                 "dataset=https://health-ri.sandbox.semlab-leiden.nl/dataset/d7129d28-b72a-437f-8db0-4f0258dd3c25")
         fdp_get_graph.side_effect = get_graph_by_id
         actual = self.fdp_record_provider.get_record_by_id(guid)
-        expected = Graph().parse("./ckanext-fairdatapoint/ckanext/fairdatapoint/tests/test_data/dataset_d7129d28-b72a-437f-8db0-4f0258dd3c25_out.ttl").serialize()
+        expected = Graph().parse("./ckanext-fairdatapoint/ckanext/fairdatapoint/tests/test_data/"
+                                 "dataset_d7129d28-b72a-437f-8db0-4f0258dd3c25_out.ttl").serialize()
         assert actual == expected
 
     def test_orcid_call(self, mocker):
+        """if orcid url in contact point - add vcard full name"""
         with requests_mock.Mocker() as mock:
-            mock.get("https://orcid.org/0000-0002-4348-707X/public-record.json", json={"displayName": "N.K. De Vries"})
+            mock.get("https://orcid.org/0000-0002-4348-707X/public-record.json", 
+                     json={"displayName": "N.K. De Vries"})
             fdp_get_graph = mocker.MagicMock(name="get_data")
             mocker.patch("ckanext.fairdatapoint.harvesters.domain.fair_data_point.FairDataPoint.get_graph",
                          new=fdp_get_graph)
-            guid = ("catalog=https://covid19initiatives.health-ri.nl/p/ProjectOverview?focusarea=http://purl.org/zonmw/generic/10006;"
+            guid = ("catalog=https://covid19initiatives.health-ri.nl/p/ProjectOverview?focusarea="
+                    "http://purl.org/zonmw/generic/10006;"
                     "dataset=https://covid19initiatives.health-ri.nl/p/Project/27866022694497978")
             fdp_get_graph.side_effect = get_graph_by_id
             actual = self.fdp_record_provider.get_record_by_id(guid)
-            expected = Graph().parse("./ckanext-fairdatapoint/ckanext/fairdatapoint/tests/test_data/Project_27866022694497978_out.ttl").serialize()
+            expected = Graph().parse("./ckanext-fairdatapoint/ckanext/fairdatapoint/tests/test_data/"
+                                     "Project_27866022694497978_out.ttl").serialize()
+            assert mock.called
             assert actual == expected
