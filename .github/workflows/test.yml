@@ -49,5 +49,6 @@ jobs:
 
         ckan -c test.ini db init
     - name: Run tests
+      working-directory: ./gdi-userportal-ckanext-fairdatapoint/
       run: pytest --ckan-ini=test.ini --cov=ckanext.fairdatapoint --disable-warnings ckanext/fairdatapoint
 
