@@ -41,7 +41,7 @@ jobs:
         pip install -e 'git+https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-dcat.git@v1.5.1#egg=ckanext-dcat[requirements]'
         pip install geomet>=0.2.0
         pip install future>=0.18.2
-        pip install -e 'git+git@github.com:CivityNL/ckanext-healthri.git#egg=ckanext-healthri[requirements]'
+        pip install -e 'git+https://github.com:CivityNL/ckanext-healthri.git#egg=ckanext-healthri[requirements]'
         pip install -e .
     - name: Setup extension
       # Extra initialization steps
