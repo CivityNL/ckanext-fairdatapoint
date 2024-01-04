@@ -35,6 +35,7 @@ jobs:
       run: |
         pip install -r requirements.txt
         pip install -r dev-requirements.txt
+        pip install --upgrade pytest-rerunfailures
         pip install -e 'git+https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-scheming.git@release-3.0.0#egg=ckanext-scheming'
         pip install -e .
     - name: Setup extension
