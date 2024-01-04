@@ -1,7 +1,7 @@
 from ckanext.dcat.profiles import EuropeanDCATAP2Profile
 from ckan.plugins import toolkit
 from ckan import model
-
+import json
 
 def _convert_extras_to_declared_schema_fields(dataset_dict):
     '''
@@ -18,15 +18,20 @@ def _convert_extras_to_declared_schema_fields(dataset_dict):
     data_dict = {'type': dataset_type}
     full_schema_dict = toolkit.get_action('scheming_dataset_schema_show')(context, data_dict)
 
-    dataset_field_list = [x.get('field_name') for x in full_schema_dict.get('dataset_fields', [])]
+    dataset_fields = { x.get('field_name') : x.get('preset') for x in full_schema_dict.get('dataset_fields', []) }
 
     # Populate the declared schema fields, if they are present in the extras
     for extra_dict in dataset_dict.get('extras', []):
-        if extra_dict.get('key') in dataset_field_list:
-            dataset_dict[extra_dict.get('key')] = extra_dict.get('value')
+        field_key = extra_dict.get('key')
+        if field_key in dataset_fields:
+            preset = dataset_fields[field_key]
+            if preset == "multiple_text" and extra_dict.get('value'):
+                dataset_dict[field_key] = json.loads(extra_dict.get('value'))
+            else:
+                dataset_dict[field_key] = extra_dict.get('value')
 
     # Remove the extras that have been populated into the declared schema fields
-    dataset_dict['extras'] = [d for d in dataset_dict['extras'] if d.get('key') not in dataset_field_list]
+    dataset_dict['extras'] = [d for d in dataset_dict['extras'] if d.get('key') not in dataset_fields]
 
     return dataset_dict
 
