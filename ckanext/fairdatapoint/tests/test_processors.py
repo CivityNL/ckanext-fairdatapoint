@@ -52,7 +52,7 @@ class TestProcessors:
             "tags": [],
             "license_id": "",
             "identifier": "27866022694497978",
-            "has_version": "[\"https://repo.metadatacenter.org/template-instances/2836bf1c-76e9-44e7-a65e-80e9ca63025a\"]",
+            "has_version": ["https://repo.metadatacenter.org/template-instances/2836bf1c-76e9-44e7-a65e-80e9ca63025a"],
             "contact_uri": "https://orcid.org/0000-0002-4348-707X",
             "publisher_uri": "https://opal.health-ri.nl/pub/",
             "temporal_start": "2020-01-01",
@@ -69,8 +69,8 @@ class TestProcessors:
         expected = {
                        "access_rights": "https://fair.healthinformationportal.eu/catalog/"
                                         "1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d#accessRights",
-                       "conforms_to": "[\"https://fair.healthinformationportal.eu/profile/"
-                                      "a0949e72-4466-4d53-8900-9436d1049a4b\"]",
+                       "conforms_to": ["https://fair.healthinformationportal.eu/profile/"
+                                      "a0949e72-4466-4d53-8900-9436d1049a4b"],
                        "extras": [{"key": "uri",
                                    "value": "https://fair.healthinformationportal.eu/catalog/"
                                             "1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d"},
@@ -78,9 +78,9 @@ class TestProcessors:
                                    "value": "Hello from the FAIR data point profile. Use this "
                                             "function to do FAIR data point specific stuff during "
                                             "the import stage"}],
-                       "has_version": "[\"1.0\"]",
+                       "has_version": ["1.0"],
                        "issued": "2023-10-06T10:12:55.614000+00:00",
-                       "language": "[\"http://id.loc.gov/vocabulary/iso639-1/en\"]",
+                       "language": ["http://id.loc.gov/vocabulary/iso639-1/en"],
                        "license_id": "",
                        "modified": "2023-10-06T10:12:55.614000+00:00",
                        "publisher_name": "Automatic",
