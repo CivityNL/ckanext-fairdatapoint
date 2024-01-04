@@ -1,8 +1,11 @@
 import pytest
+from pathlib import Path
 from unittest.mock import patch
 from rdflib import Graph
 from ckanext.fairdatapoint.harvesters.domain.fair_data_point_record_to_package_converter import (
     FairDataPointRecordToPackageConverter)
+
+TEST_DATA_DIRECTORY = Path(Path(__file__).parent.resolve(), "test_data")
 
 
 @pytest.mark.ckan_config("ckan.plugins", "scheming_datasets")
@@ -11,8 +14,7 @@ class TestProcessors:
     @patch("ckanext.fairdatapoint.processors.FairDataPointRDFParser.datasets")
     def test_fdp_record_converter_dataset(self, parser_datasets):
         fdp_record_to_package = FairDataPointRecordToPackageConverter(profile="fairdatapoint_dcat_ap")
-        data = Graph().parse("./ckanext-fairdatapoint/ckanext/fairdatapoint/tests/test_data/"
-                             "Project_27866022694497978_out.ttl").serialize()
+        data = Graph().parse(Path(TEST_DATA_DIRECTORY, "Project_27866022694497978_out.ttl")).serialize()
         fdp_record_to_package.record_to_package(guid="catalog=https://covid19initiatives.health-ri.nl/p/"
                                                      "ProjectOverview?focusarea=http://purl.org/zonmw/generic/10006;"
                                                      "dataset=https://covid19initiatives.health-ri.nl/p/Project/"
@@ -23,8 +25,7 @@ class TestProcessors:
     @patch("ckanext.fairdatapoint.processors.FairDataPointRDFParser.catalogs")
     def test_fdp_record_converter_catalog(self, parser_catalogs):
         fdp_record_to_package = FairDataPointRecordToPackageConverter(profile="fairdatapoint_dcat_ap")
-        data = Graph().parse(
-            "./ckanext-fairdatapoint/ckanext/fairdatapoint/tests/test_data/fdp_catalog.ttl").serialize()
+        data = Graph().parse(Path(TEST_DATA_DIRECTORY, "fdp_catalog.ttl")).serialize()
         fdp_record_to_package.record_to_package(
             guid="catalog=https://fair.healthinformationportal.eu/catalog/1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d",
             record=data)
@@ -32,8 +33,7 @@ class TestProcessors:
 
     def test_fdp_record_converter_dataset_dict(self):
         fdp_record_to_package = FairDataPointRecordToPackageConverter(profile="fairdatapoint_dcat_ap")
-        data = Graph().parse("./ckanext-fairdatapoint/ckanext/fairdatapoint/tests/test_data/"
-                             "Project_27866022694497978_out.ttl").serialize()
+        data = Graph().parse(Path(TEST_DATA_DIRECTORY, "Project_27866022694497978_out.ttl")).serialize()
         actual_dataset = fdp_record_to_package.record_to_package(
             guid="catalog=https://covid19initiatives.health-ri.nl/p/ProjectOverview?focusarea="
                  "http://purl.org/zonmw/generic/10006;"
@@ -61,8 +61,7 @@ class TestProcessors:
 
     def test_fdp_record_converter_catalog_dict(self):
         fdp_record_to_package = FairDataPointRecordToPackageConverter(profile="fairdatapoint_dcat_ap")
-        data = Graph().parse(
-            "./ckanext-fairdatapoint/ckanext/fairdatapoint/tests/test_data/fdp_catalog.ttl").serialize()
+        data = Graph().parse(Path(TEST_DATA_DIRECTORY, "fdp_catalog.ttl")).serialize()
         actual = fdp_record_to_package.record_to_package(
             guid="catalog=https://fair.healthinformationportal.eu/catalog/1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d",
             record=data)

@@ -1,9 +1,11 @@
 import pytest
 import requests_mock
+from pathlib import Path
 from pytest_mock import class_mocker, mocker
 from rdflib import Graph, URIRef
 from ckanext.fairdatapoint.harvesters.domain.fair_data_point_record_provider import FairDataPointRecordProvider
 
+TEST_DATA_DIRECTORY = Path(Path(__file__).parent.resolve(), "test_data")
 
 TEST_CAT_IDS_DICT = {
             "catalog=https://fair.healthinformationportal.eu/catalog/1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d":
@@ -24,7 +26,7 @@ TEST_CAT_IDS_DICT = {
 def get_graph_by_id(*args, **kwargs):
     file_id = args[0]
     file_id = "_".join(file_id.split("/")[-2:])
-    path_to_file = f"./ckanext-fairdatapoint/ckanext/fairdatapoint/tests/test_data/{file_id}.ttl"
+    path_to_file = Path(TEST_DATA_DIRECTORY, f"{file_id}.ttl")
     graph = Graph().parse(path_to_file)
     return graph
 
@@ -34,9 +36,9 @@ class TestRecordProvider:
 
     @pytest.mark.parametrize("fdp_response_file,expected",
                          [
-                             ("./ckanext/fairdatapoint/tests/test_data/root_fdp_response.ttl",
+                             (Path(TEST_DATA_DIRECTORY, "root_fdp_response.ttl"),
                               TEST_CAT_IDS_DICT.keys()),
-                             ("./ckanext/fairdatapoint/tests/test_data/root_fdp_response_no_catalogs.ttl",
+                             (Path(TEST_DATA_DIRECTORY, "root_fdp_response_no_catalogs.ttl"),
                               dict().keys())
                           ])
     def test_get_record_ids(self, mocker, fdp_response_file, expected):
@@ -66,8 +68,8 @@ class TestRecordProvider:
                 "dataset=https://fair.healthinformationportal.eu/dataset/898ca4b8-197b-4d40-bc81-d9cd88197670")
         fdp_get_graph.side_effect = get_graph_by_id
         actual = self.fdp_record_provider.get_record_by_id(guid)
-        expected = Graph().parse(f"./ckanext-fairdatapoint/ckanext/fairdatapoint/tests/test_data/"
-                                 f"dataset_898ca4b8-197b-4d40-bc81-d9cd88197670.ttl").serialize()
+        expected = Graph().parse(
+            Path(TEST_DATA_DIRECTORY, "dataset_898ca4b8-197b-4d40-bc81-d9cd88197670.ttl")).serialize()
         assert actual == expected
 
     def test_get_record_by_id_distr(self, mocker):
@@ -79,8 +81,8 @@ class TestRecordProvider:
                 "dataset=https://health-ri.sandbox.semlab-leiden.nl/dataset/d7129d28-b72a-437f-8db0-4f0258dd3c25")
         fdp_get_graph.side_effect = get_graph_by_id
         actual = self.fdp_record_provider.get_record_by_id(guid)
-        expected = Graph().parse("./ckanext-fairdatapoint/ckanext/fairdatapoint/tests/test_data/"
-                                 "dataset_d7129d28-b72a-437f-8db0-4f0258dd3c25_out.ttl").serialize()
+        expected = Graph().parse(
+            Path(TEST_DATA_DIRECTORY, "dataset_d7129d28-b72a-437f-8db0-4f0258dd3c25_out.ttl")).serialize()
         assert actual == expected
 
     def test_orcid_call(self, mocker):
@@ -96,7 +98,6 @@ class TestRecordProvider:
                     "dataset=https://covid19initiatives.health-ri.nl/p/Project/27866022694497978")
             fdp_get_graph.side_effect = get_graph_by_id
             actual = self.fdp_record_provider.get_record_by_id(guid)
-            expected = Graph().parse("./ckanext-fairdatapoint/ckanext/fairdatapoint/tests/test_data/"
-                                     "Project_27866022694497978_out.ttl").serialize()
+            expected = Graph().parse(Path(TEST_DATA_DIRECTORY, "Project_27866022694497978_out.ttl")).serialize()
             assert mock.called
             assert actual == expected
