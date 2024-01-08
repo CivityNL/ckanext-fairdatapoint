@@ -1,3 +1,7 @@
+# File original (C) Civity
+# File modified by Stichting Health-RI in January 2024 to remove unused code
+# All changes are © Stichting Health-RI and are licensed under the AGPLv3 license
+
 import cgitb
 import json
 import sys
