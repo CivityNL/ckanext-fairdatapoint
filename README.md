@@ -98,6 +98,14 @@ do:
     python setup.py develop
     pip install -r dev-requirements.txt
 
+Fairdatapoint plugin depends on `ckanext-scheming`, `ckanext-harvester` and `ckanext-dcat`. Make sure these are installed,
+otherwise run:
+```commandline
+pip install -e 'git+https://github.com/ckan/ckanext-scheming.git@release-3.0.0#egg=ckanext-scheming[requirements]'
+pip install -e 'git+https://github.com/ckan/ckanext-harvest.git@v1.5.6#egg=ckanext-harvest[requirements]'
+pip install -e 'git+https://github.com/ckan/ckanext-dcat.git@v1.5.1#egg=ckanext-dcat'
+pip install -r https://raw.githubusercontent.com/ckan/ckanext-dcat/v1.5.1/requirements.txt
+```
 
 ## Tests
 
