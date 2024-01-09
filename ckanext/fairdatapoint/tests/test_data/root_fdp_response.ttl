@@ -1,0 +1,60 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ldp: <http://www.w3.org/ns/ldp#> .
+@prefix ns1: <http://semanticscience.org/resource/> .
+@prefix ns2: <https://w3id.org/fdp/fdp-o#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://fair.healthinformationportal.eu/catalog/> a ldp:DirectContainer ;
+    dcterms:title "Catalogs" ;
+    ldp:contains <https://fair.healthinformationportal.eu/catalog/113b6f3a-07b5-484b-9278-4b58d2b247ed>,
+        <https://fair.healthinformationportal.eu/catalog/14225c50-00b0-4fba-8300-a677ab0c86f4>,
+        <https://fair.healthinformationportal.eu/catalog/17412bc2-daf1-491e-94fb-6680f7a67b1e> ;
+    ldp:hasMemberRelation ns2:metadataCatalog ;
+    ldp:membershipResource <https://fair.healthinformationportal.eu> .
+
+<https://fair.healthinformationportal.eu#accessRights> a dcterms:RightsStatement ;
+    dcterms:description "This resource has no access restriction" .
+
+<https://fair.healthinformationportal.eu#identifier> a <http://purl.org/spar/datacite/Identifier> ;
+    dcterms:identifier "https://fair.healthinformationportal.eu" .
+
+<https://fair.healthinformationportal.eu#publisher> a foaf:Agent ;
+    foaf:name "HealthInformationPortal.eu" .
+
+<https://fair.healthinformationportal.eu/metrics/445c0a70d1e214e545b261559e2842f4> ns1:SIO_000332 <https://www.ietf.org/rfc/rfc3986.txt> ;
+    ns1:SIO_000628 <https://www.ietf.org/rfc/rfc3986.txt> .
+
+<https://fair.healthinformationportal.eu/metrics/5d27e854a9e78eb3f663331cd47cdc13> ns1:SIO_000332 <https://www.wikidata.org/wiki/Q8777> ;
+    ns1:SIO_000628 <https://www.wikidata.org/wiki/Q8777> .
+
+<https://fair.healthinformationportal.eu/profile/77aaad6a-0136-4c6e-88b9-07ffccd0ee4c> rdfs:label "FAIR Data Point Profile" .
+
+<https://fair.healthinformationportal.eu> a dcat:DataService,
+        dcat:Resource,
+        ns2:FAIRDataPoint,
+        ns2:MetadataService ;
+    rdfs:label "European Health Information portal endpoint" ;
+    dcterms:accessRights <https://fair.healthinformationportal.eu#accessRights> ;
+    dcterms:conformsTo <https://fair.healthinformationportal.eu/profile/77aaad6a-0136-4c6e-88b9-07ffccd0ee4c> ;
+    dcterms:description "Welcome to the one-stop shop that facilitates access to population health and health care data, information and expertise across Europe." ;
+    dcterms:hasVersion "1.0" ;
+    dcterms:language <http://id.loc.gov/vocabulary/iso639-1/en> ;
+    dcterms:license <https://creativecommons.org/licenses/by-nc/4.0> ;
+    dcterms:publisher <https://fair.healthinformationportal.eu#publisher> ;
+    dcterms:rights <http://publications.europa.eu/resource/authority/access-right/PUBLIC> ;
+    dcterms:title "European Health Information portal endpoint" ;
+    ns1:SIO_000628 <https://fair.healthinformationportal.eu/metrics/445c0a70d1e214e545b261559e2842f4>,
+        <https://fair.healthinformationportal.eu/metrics/5d27e854a9e78eb3f663331cd47cdc13> ;
+    dcat:endpointURL <https://fair.healthinformationportal.eu> ;
+    ns2:fdpSoftwareVersion "FDP:v1.16.2~51911d6" ;
+    ns2:metadataCatalog <https://fair.healthinformationportal.eu/catalog/113b6f3a-07b5-484b-9278-4b58d2b247ed>,
+        <https://fair.healthinformationportal.eu/catalog/14225c50-00b0-4fba-8300-a677ab0c86f4>,
+        <https://fair.healthinformationportal.eu/catalog/17412bc2-daf1-491e-94fb-6680f7a67b1e> ;
+    ns2:metadataIdentifier <https://fair.healthinformationportal.eu#identifier> ;
+    ns2:metadataIssued "2023-10-06T09:56:33.262000+00:00"^^xsd:dateTime ;
+    ns2:metadataModified "2023-10-25T14:04:46.441000+00:00"^^xsd:dateTime ;
+    ns2:uiLanguage <http://id.loc.gov/vocabulary/iso639-1/en> .
+

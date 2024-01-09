@@ -1,3 +1,8 @@
+# File original (C) Civity
+# File modified by Stichting Health-RI in January 2024 to rename the dataset_fields variable and
+#  check for multiple-text fields in the schema
+# All changes are © Stichting Health-RI and are licensed under the AGPLv3 license
+
 from ckanext.dcat.profiles import EuropeanDCATAP2Profile
 from ckan.plugins import toolkit
 from ckan import model

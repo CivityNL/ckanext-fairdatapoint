@@ -1,0 +1,19 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix v: <http://www.w3.org/2006/vcard/ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+<https://covid19initiatives.health-ri.nl/p/Project/27866022694497978> a dcat:Dataset ;
+    dcterms:creator <https://orcid.org/0000-0002-0180-3636> ;
+    dcterms:description "Clinical data of MUMC COVID-NL cohort" ;
+    dcterms:hasVersion <https://repo.metadatacenter.org/template-instances/2836bf1c-76e9-44e7-a65e-80e9ca63025a> ;
+    dcterms:identifier "27866022694497978"^^xsd:token ;
+    dcterms:isPartOf <https://covid19initiatives.health-ri.nl/p/ProjectOverview?focusarea=http://purl.org/zonmw/generic/10006> ;
+    dcterms:publisher <https://opal.health-ri.nl/pub/> ;
+    dcterms:temporal [ a dcterms:PeriodOfTime ;
+            dcat:endDate "2025-12-31"^^xsd:date ;
+            dcat:startDate "2020-01-01"^^xsd:date ] ;
+    dcterms:title "COVID-NL cohort MUMC+"@en ;
+    dcat:contactPoint <https://orcid.org/0000-0002-4348-707X> .

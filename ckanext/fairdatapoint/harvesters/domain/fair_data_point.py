@@ -1,3 +1,7 @@
+# File original (C) Civity
+# File modified by Stichting Health-RI in January 2024 to remove a debugging graph-print function
+# All changes are © Stichting Health-RI and are licensed under the AGPLv3 license
+
 import requests
 
 from rdflib import Graph
@@ -30,11 +34,3 @@ class FairDataPoint:
         }
         response = requests.request("GET", path, headers=headers)
         return response.text
-
-    @staticmethod
-    def print_graph(g):
-        for prefix, ns in g.namespaces():
-            print(prefix, ns)
-
-        for s, p, o in g:
-            print(s, ' - ', p, ' - ', o)

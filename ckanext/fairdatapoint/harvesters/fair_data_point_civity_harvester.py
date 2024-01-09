@@ -1,3 +1,6 @@
+# File original (C) Civity
+# File modified by Stichting Health-RI to allow for a non-custom exception
+# All changes are © Stichting Health-RI and are licensed under the AGPLv3 license
 from ckanext.fairdatapoint.harvesters.civity_harvester import CivityHarvester
 from ckanext.fairdatapoint.harvesters.domain.fair_data_point_record_provider import FairDataPointRecordProvider
 from ckanext.fairdatapoint.harvesters.domain.fair_data_point_record_to_package_converter import \

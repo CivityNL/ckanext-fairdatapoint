@@ -1,0 +1,842 @@
+{
+  "scheming_version": 1,
+  "dataset_type": "dataset",
+  "about": "Dataset Schema Compatible with DCAT 2.1.1 for Health-RI Catalogus",
+  "about_url": "https://github.com/SEMICeu/DCAT-AP/tree/master/releases/2.1.1",
+  "dataset_fields": [
+    {
+      "field_name": "title",
+      "label": "Title",
+      "preset": "title",
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:title] This property contains a name given to the Dataset.",
+        "nl": "[dct:title] Deze eigenschap bevat een naam die aan de gegevensset is gegeven."
+      }
+    },
+    {
+      "field_name": "name",
+      "label": "URL",
+      "preset": "dataset_slug",
+      "form_placeholder": ""
+    },
+    {
+      "field_name": "notes",
+      "form_snippet": "markdown.html",
+      "label": "Description",
+      "required": true,
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:description] This property contains a free-text account of the Dataset.",
+        "nl": "[dct:description] Deze eigenschap bevat een vrije-tekstaccount van de gegevensset."
+      }
+    },
+    {
+      "field_name": "tag_string",
+      "label": "Tags",
+      "preset": "tag_string_autocomplete",
+      "help_inline": true,
+      "help_text": {
+        "en": "[dcat:keyword] This property contains a keyword or tag describing the Dataset.",
+        "nl": "[dcat:keyword] Deze eigenschap bevat een trefwoord of tag die de gegevensset beschrijft."
+      }
+    },
+    {
+      "field_name": "license_id",
+      "label": "License",
+      "form_snippet": "license.html",
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:license] This property refers to the licence under which the Dataset is made available.",
+        "nl": "[dct:license] Deze eigenschap heeft betrekking op de licentie waaronder de Dataset beschikbaar wordt gesteld."
+      }
+    },
+    {
+      "field_name": "owner_org",
+      "preset": "dataset_organization",
+      "label": "Organization",
+      "sorted_choices": true
+    },
+    {
+      "field_name": "url",
+      "label": "Source",
+      "form_placeholder": "http://example.com/dataset.json",
+      "display_snippet": "link.html",
+      "help_inline": true,
+      "help_text": {
+        "en": "[dcat:landingPage] This property refers to a web page that provides access to the Dataset, its Distributions and/or additional information. It is intended to point to a landing page at the original data provider, not to a page on a site of a third party, such as an aggregator.",
+        "nl": "[dcat:landingPage] Deze eigenschap verwijst naar een webpagina die toegang biedt tot de Dataset, de Distributies ervan en/of aanvullende informatie. Het is de bedoeling dat deze verwijst naar een landingspagina bij de oorspronkelijke dataprovider, niet naar een pagina op een site van een derde partij, zoals een aggregator."
+      }
+    },
+    {
+      "field_name": "version",
+      "label": "Version",
+      "validators": "ignore_missing unicode_safe package_version_validator",
+      "form_placeholder": "1.0",
+      "help_inline": true,
+      "help_text": {
+        "en": "[owl:versionInfo] This property contains a version number or other version designation of the Dataset.",
+        "nl": "[owl:versionInfo] Deze eigenschap bevat een versienummer of een andere versieaanduiding van de dataset."
+      }
+    },
+    {
+      "field_name": "author",
+      "label": "Author",
+      "form_placeholder": "Joe Bloggs",
+      "help_inline": true,
+      "help_text": {
+        "en": "[CKAN] Fallback value for [vcard:fn]",
+        "nl": "[CKAN] Terugvalwaarde voor [vcard:fn]"
+      }
+    },
+    {
+      "field_name": "author_email",
+      "label": "Author Email",
+      "form_placeholder": "joe@example.com",
+      "display_snippet": "email.html",
+      "display_email_name_field": "author",
+      "help_inline": true,
+      "help_text": {
+        "en": "[CKAN] Fallback value for [vcard:hasEmail]",
+        "nl": "[CKAN] Terugvalwaarde voor [vcard:hasEmail]"
+      }
+    },
+    {
+      "field_name": "maintainer",
+      "label": "Maintainer",
+      "form_placeholder": "Joe Bloggs",
+      "help_inline": true,
+      "help_text": {
+        "en": "[CKAN] Fallback value for [vcard:fn]",
+        "nl": "[CKAN] Terugvalwaarde voor [vcard:fn]"
+      }
+    },
+    {
+      "field_name": "maintainer_email",
+      "label": "Maintainer Email",
+      "form_placeholder": "joe@example.com",
+      "display_snippet": "email.html",
+      "display_email_name_field": "maintainer",
+      "help_inline": true,
+      "help_text": {
+        "en": "[CKAN] Fallback value for [vcard:hasEmail]",
+        "nl": "[CKAN] Terugvalwaarde voor [vcard:hasEmail]"
+      }
+    },
+    {
+      "field_name": "contact_uri",
+      "help_inline": true,
+      "help_text": {
+        "en": "[dcat:contactPoint] This property contains contact information that can be used for sending comments about the Dataset.",
+        "nl": "[dcat:contactPoint] Deze eigenschap bevat contactgegevens die kunnen worden gebruikt voor het verzenden van opmerkingen over de gegevensset."
+      },
+      "label": {
+        "en": "Contact URI",
+        "nl": "Contact URI"
+      }
+    },
+    {
+      "field_name": "contact_name",
+      "label": {
+        "en": "Contact Name",
+        "nl": "Contact Naam"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[vcard:fn] This property contains contact information that can be used for sending comments about the Dataset.",
+        "nl": "[vcard:fn] Deze eigenschap bevat contactgegevens die kunnen worden gebruikt voor het verzenden van opmerkingen over de gegevensset."
+      }
+    },
+    {
+      "field_name": "contact_email",
+      "help_inline": true,
+      "help_text": {
+        "en": "[vcard:hasEmail] This property contains contact information that can be used for sending comments about the Dataset.",
+        "nl": "[vcard:hasEmail] Deze eigenschap bevat contactgegevens die kunnen worden gebruikt voor het verzenden van opmerkingen over de gegevensset."
+      },
+      "label": {
+        "en": "Contact Email",
+        "nl": "Contact Email"
+      },
+      "display_snippet": "email.html"
+    },
+    {
+      "field_name": "publisher_uri",
+      "label": {
+        "en": "Publisher",
+        "nl": "Publiceerder"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:publisher] This property refers to an entity (organisation) responsible for making the Dataset available.",
+        "nl": "[dct:publisher] Deze eigenschap verwijst naar een entiteit (organisatie) die verantwoordelijk is voor het beschikbaar stellen van de Dataset."
+      }
+    },
+    {
+      "field_name": "publisher_name",
+      "label": {
+        "en": "Publisher Name",
+        "nl": "Publiceerder Naam"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[foaf:name] This property contains a name of the agent.",
+        "nl": "[foaf:name] Deze eigenschap bevat een naam van de agent."
+      }
+    },
+    {
+      "field_name": "publisher_email",
+      "label": {
+        "en": "Publisher Email",
+        "nl": "Publiceerder Email"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[foaf:mbox] This property contains an email of the agent.",
+        "nl": "[foaf:mbox] Deze eigenschap bevat een e-mailadres van de makelaar."
+      }
+    },
+    {
+      "field_name": "publisher_url",
+      "label": {
+        "en": "Publisher URL",
+        "nl": "Publiceerder URL"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[foaf:homepage] This property refers to a web page that acts as the main page for the Catalogue.",
+        "nl": "[foaf:homepage] Deze eigenschap verwijst naar een webpagina die fungeert als hoofdpagina voor de catalogus."
+      }
+    },
+    {
+      "field_name": "publisher_type",
+      "label": {
+        "en": "Publisher Type",
+        "nl": "Publiceerder Type"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:type] This property refers to the type of the Dataset. ",
+        "nl": "[dct:type] Deze eigenschap verwijst naar het type gegevensset."
+      }
+    },
+    {
+      "field_name": "spatial_uri",
+      "label": {
+        "en": "Spatial URI",
+        "nl": "Spatial URI"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:spatial] This property refers to a geographic region that is covered by the Dataset. ",
+        "nl": "[dct:spatial] Deze eigenschap verwijst naar een geografische regio die wordt gedekt door de gegevensset."
+      }
+    },
+    {
+      "field_name": "temporal_start",
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:temporal] This property refers to a temporal period that the Dataset covers.",
+        "nl": "[dct:temporal] Deze eigenschap verwijst naar een tijdelijke periode die de gegevensset bestrijkt."
+      },
+      "label": {
+        "en": "Temportal Start Date",
+        "nl": "Startdatum"
+      },
+      "preset": "date"
+    },
+    {
+      "field_name": "temporal_end",
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:temporal] This property refers to a temporal period that the Dataset covers.",
+        "nl": "[dct:temporal] Deze eigenschap verwijst naar een tijdelijke periode die de gegevensset bestrijkt."
+      },
+      "label": {
+        "en": "Temporal end date",
+        "nl": "Einddatum"
+      },
+      "preset": "date"
+    },
+    {
+      "field_name": "theme",
+      "label": {
+        "en": "Theme",
+        "nl": "Thema"
+      },
+      "preset": "multiple_text",
+      "help_inline": true,
+      "help_text": {
+        "en": "[dcat:theme] This property refers to a category of the Dataset. A Dataset may be associated with multiple themes.",
+        "nl": "[dcat:theme] Deze eigenschap verwijst naar een categorie van de gegevensset. Een dataset kan aan meerdere thema's zijn gekoppeld."
+      }
+    },
+    {
+      "field_name": "version_notes",
+      "label": {
+        "en": "Version Notes",
+        "nl": "Versie-opmerkingen"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[adms:versionNotes] This property contains a description of the differences between this version and a previous version of the Dataset.",
+        "nl": "[adms:versionNotes] Deze eigenschap bevat een beschrijving van de verschillen tussen deze versie en een eerdere versie van de gegevensset."
+      }
+    },
+    {
+      "field_name": "landing_page",
+      "label": {
+        "en": "Landing Page",
+        "nl": "Landingspagina"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dcat:landingPage] This property refers to a web page that provides access to the Dataset, its Distributions and/or additional information. It is intended to point to a landing page at the original data provider, not to a page on a site of a third party, such as an aggregator.",
+        "nl": "[dcat:landingPage] Deze eigenschap verwijst naar een webpagina die toegang biedt tot de Dataset, de Distributies ervan en/of aanvullende informatie. Het is de bedoeling dat deze verwijst naar een landingspagina bij de oorspronkelijke dataprovider, niet naar een pagina op een site van een derde partij, zoals een aggregator."
+      }
+    },
+    {
+      "field_name": "spatial_resolution_in_meters",
+      "label": {
+        "en": "Spatial Resolution in Meters",
+        "nl": "Ruimtelijke resolutie in meters"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dcat:spatialResolutionInMeters] This property refers to the minimum spatial separation resolvable in a dataset, measured in meters.",
+        "nl": "[dcat:spatialResolutionInMeters] Deze eigenschap verwijst naar de minimale ruimtelijke scheiding die in een dataset kan worden opgelost, gemeten in meters."
+      }
+    },
+    {
+      "field_name": "temporal_resolution",
+      "label": {
+        "en": "Temporal Resolution",
+        "nl": "Tijdelijke resolutie"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dcat:temporalResolution] This property refers to the minimum time period resolvable in the dataset.",
+        "nl": "[dcat:temporalResolution] Deze eigenschap verwijst naar de minimale tijdsperiode die in de gegevensset kan worden opgelost."
+      }
+    },
+    {
+      "field_name": "qualified_relation",
+      "label": {
+        "en": "Qualified Relation",
+        "nl": "Gekwalificeerde relatie"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dcat:qualifiedRelation] This property provides a link to a description of a relationship with another resource.",
+        "nl": "[dcat:qualifiedRelation] Deze eigenschap biedt een link naar een beschrijving van een relatie met een andere resource."
+      }
+    },
+    {
+      "field_name": "access_rights",
+      "label": {
+        "en": "Access rights",
+        "nl": "Toegangsrechten"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:accessRights] This property refers to information that indicates whether the Dataset is open data, has access restrictions or is not public.",
+        "nl": "[dct:accessRights] Deze eigenschap verwijst naar informatie die aangeeft of de Dataset open data is, toegangsbeperkingen heeft of niet openbaar is."
+      }
+    },
+    {
+      "field_name": "frequency",
+      "label": {
+        "en": "Frequency",
+        "nl": "Frequentie"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:accrualPeriodicity] This property refers to the frequency at which the Dataset is updated.",
+        "nl": "[dct:accrualPeriodicity] Deze eigenschap verwijst naar de frequentie waarmee de gegevensset wordt bijgewerkt."
+      }
+    },
+    {
+      "field_name": "conforms_to",
+      "label": {
+        "en": "Conforms to",
+        "nl": "Conformeerd naar"
+      },
+      "preset": "multiple_text",
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:conformsTo] This property refers to an implementing rule or other specification.",
+        "nl": "[dct:conformsTo] Deze eigenschap verwijst naar een implementatieregel of andere specificatie."
+      }
+    },
+    {
+      "field_name": "creator",
+      "label": {
+        "en": "Creator",
+        "nl": "Maker"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:creator] This property refers to the  entity responsible for producing the dataset.",
+        "nl": "[dct:creator] Deze eigenschap verwijst naar de entiteit die verantwoordelijk is voor het produceren van de gegevensset."
+      }
+    },
+    {
+      "field_name": "is_referenced_by",
+      "label": {
+        "en": "Is referenced by",
+        "nl": "Er wordt verwezen naar"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:isReferencedBy] This property is about a related resource, such as a publication, that references, cites, or otherwise points to the dataset.",
+        "nl": "[dct:isReferencedBy] Deze eigenschap gaat over een gerelateerde bron, zoals een publicatie, die verwijst naar, citeert of anderszins verwijst naar de gegevensset."
+      }
+    },
+    {
+      "field_name": "is_version_of",
+      "label": {
+        "en": "Is version of",
+        "nl": "Is versie van"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:isVersionOf] This property refers to a related Dataset of which the described Dataset is a version, edition, or adaptation.",
+        "nl": "[dct:isVersionOf] Deze eigenschap verwijst naar een gerelateerde Dataset waarvan de beschreven Dataset een versie, editie of aanpassing is."
+      }
+    },
+    {
+      "field_name": "identifier",
+      "label": {
+        "en": "Identifier",
+        "nl": "Identificatie"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:identifier] This property contains the main identifier for the Dataset, e.g. the URI or other unique identifier in the context of the Catalogue.",
+        "nl": "[dct:identifier] Deze eigenschap bevat de hoofdidentificatie voor de dataset, b.v. de URI of een andere unieke identificatie in de context van de Catalogus."
+      }
+    },
+    {
+      "field_name": "issued",
+      "label": {
+        "en": "Issued",
+        "nl": "Uitgiftedatum"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:issued] This property contains the date of formal issuance (e.g., publication) of the Dataset.",
+        "nl": "[dct:issued] Deze eigenschap bevat de datum van formele uitgifte (bijvoorbeeld publicatie) van de dataset."
+      },
+      "preset": "date"
+    },
+    {
+      "field_name": "language",
+      "label": {
+        "en": "Language",
+        "nl": "Taal"
+      },
+      "preset": "multiple_text",
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:language] This property refers to a language of the Dataset. This property can be repeated if there are multiple languages in the Dataset.",
+        "nl": "[dct:language] Deze eigenschap verwijst naar een taal van de gegevensset. Deze eigenschap kan worden herhaald als de gegevensset meerdere talen bevat."
+      }
+    },
+    {
+      "field_name": "modified",
+      "label": {
+        "en": "Modification Date",
+        "nl": "Wijzigingsdatum"
+      },
+      "preset": "date",
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:modified] This property contains the most recent date on which the Dataset was changed or modified.",
+        "nl": "[dct:modified] Deze eigenschap bevat de meest recente datum waarop de dataset is gewijzigd of aangepast."
+      }
+    },
+    {
+      "field_name": "provenance",
+      "label": {
+        "en": "Provenance",
+        "nl": "Herkomst"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:provenance] This property contains a statement about the lineage of a Dataset.",
+        "nl": "[dct:provenance] Deze eigenschap bevat een verklaring over de afstamming van een gegevensset."
+      }
+    },
+    {
+      "field_name": "relation",
+      "label": {
+        "en": "Relation",
+        "nl": "Relatie"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:relation] This property refers to a related resource.",
+        "nl": "[dct:relation] Deze eigenschap verwijst naar een gerelateerde resource."
+      }
+    },
+    {
+      "field_name": "sample",
+      "label": {
+        "en": "Sample",
+        "nl": "Steekproef"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[adms:sample] This property refers to a sample distribution of the dataset.",
+        "nl": "[adms:sample] Deze eigenschap verwijst naar een voorbeelddistributie van de gegevensset."
+      }
+    },
+    {
+      "field_name": "source",
+      "label": {
+        "en": "Source",
+        "nl": "Bron"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:source] This property refers to a related Dataset from which the described Dataset is derived.",
+        "nl": "[dct:source] Deze eigenschap verwijst naar een gerelateerde Dataset waarvan de beschreven Dataset is afgeleid."
+      }
+    },
+    {
+      "field_name": "dcat_type",
+      "label": {
+        "en": "Type",
+        "nl": "Type"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:type] This property refers to the type of the Dataset.",
+        "nl": "[dct:type] Deze eigenschap verwijst naar het type gegevensset."
+      }
+    },
+    {
+      "field_name": "has_version",
+      "label": {
+        "en": "Has Version",
+        "nl": "Heeft versie"
+      },
+      "preset": "multiple_text",
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:hasVersion] This property refers to a related Dataset that is a version, edition, or adaptation of the described Dataset.",
+        "nl": "[dct:hasVersion] Deze eigenschap verwijst naar een gerelateerde gegevensset die een versie, editie of aanpassing is van de beschreven gegevensset."
+      }
+    },
+    {
+      "field_name": "documentation",
+      "label": {
+        "en": "Documentation",
+        "nl": "Documentatie"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[foaf:page] This property refers to a page or document about this Dataset.",
+        "nl": "[foaf:page] Deze eigenschap verwijst naar een pagina of document over deze gegevensset."
+      }
+    },
+    {
+      "field_name": "qualified_attribution",
+      "label": {
+        "en": "Qualified Attribution",
+        "nl": "Gekwalificeerde toeschrijving"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[prov:qualifiedAttribution ] This property refers to a link to an Agent having some form of responsibility for the resource.",
+        "nl": "[prov:qualifiedAttribution ] Deze eigenschap verwijst naar een link naar een agent die enige vorm van verantwoordelijkheid heeft voor de bron."
+      }
+    },
+    {
+      "field_name": "was_generated_by",
+      "label": {
+        "en": "Was Generated By",
+        "nl": "Werd gegenereerd door"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[prov:wasGeneratedBy] This property refers to an activity that generated, or provides the business context for, the creation of the dataset.",
+        "nl": "[prov:wasGeneratedBy] Deze eigenschap verwijst naar een activiteit die het maken van de gegevensset heeft gegenereerd of de zakelijke context daarvoor biedt."
+      }
+    },
+    {
+      "field_name": "alternate_identifier",
+      "label": {
+        "en": "Alternate identifier",
+        "nl": "Alternatieve identificatie"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[adms:identifier] This property refers to a secondary identifier of the Dataset, such as MAST/ADS , DataCite , DOI , EZID  or W3ID .",
+        "nl": "[adms:identifier] Deze eigenschap verwijst naar een secundaire identificatie van de dataset, zoals MAST/ADS , DataCite , DOI , EZID of W3ID ."
+      }
+    }
+  ],
+  "resource_fields": [
+    {
+      "field_name": "url",
+      "label": "URL",
+      "preset": "resource_url_upload"
+    },
+    {
+      "field_name": "name",
+      "label": "Name",
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:title] This property contains a name given to the Distribution.",
+        "nl": "[dct:title] Deze eigenschap bevat een naam die aan de distributie is gegeven."
+      },
+      "form_placeholder": "eg. January 2011 Gold Prices"
+    },
+    {
+      "field_name": "description",
+      "label": "Description",
+      "form_snippet": "markdown.html",
+      "form_placeholder": "Some useful notes about the data",
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:description] This property contains a free-text account of the Distribution.",
+        "nl": "[dct:description] Deze eigenschap bevat een vrije-tekstverslag van de distributie."
+      }
+    },
+    {
+      "field_name": "format",
+      "label": "Format",
+      "preset": "resource_format_autocomplete",
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:format] This property refers to the file format of the Distribution.",
+        "nl": "[dct:format] Deze eigenschap verwijst naar het bestandsformaat van de distributie."
+      }
+    },
+    {
+      "field_name": "access_url",
+      "label": {
+        "en": "Access URL",
+        "nl": "Toegangs-URL"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dcat:accessURL] This property contains a URL that gives access to a Distribution of the Dataset. The resource at the access URL may contain information about how to get the Dataset.",
+        "nl": "[dcat:accessURL] Deze eigenschap bevat een URL die toegang geeft tot een distributie van de dataset. De bron op de toegangs-URL kan informatie bevatten over hoe u de gegevensset kunt verkrijgen."
+      }
+    },
+    {
+      "field_name": "availability",
+      "label": {
+        "en": "Availability",
+        "nl": "Beschikbaarheid"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dcatap:availability] This property indicates how long it is planned to keep the Distribution of the Dataset available. ",
+        "nl": "[dcatap:availability] Deze eigenschap geeft aan hoe lang het gepland is om de distributie van de gegevensset beschikbaar te houden."
+      }
+    },
+    {
+      "field_name": "status",
+      "label": {
+        "en": "Status",
+        "nl": "Toestand"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[adms:status] The status of the distribution in the context of maturity lifecycle.",
+        "nl": "[adms:status] De status van de distributie in de context van de volwassenheidslevenscyclus."
+      }
+    },
+    {
+      "field_name": "access_services",
+      "label": {
+        "en": "Access Services",
+        "nl": "Toegang tot diensten"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dcat:accessService] This property refers to a data service that gives access to the distribution of the dataset.",
+        "nl": "[dcat:accessService] Deze eigenschap verwijst naar een dataservice die toegang geeft tot de distributie van de dataset."
+      }
+    },
+    {
+      "field_name": "size",
+      "label": "Size",
+      "form_snippet": null
+    },
+    {
+      "field_name": "compress_format",
+      "label": {
+        "en": "Compress Format",
+        "nl": "Formaat comprimeren"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dcat:compressFormat] This property refers to the format of the file in which the data is contained in a compressed form, e.g. to reduce the size of the downloadable file.",
+        "nl": "[dcat:compressFormat] Deze eigenschap heeft betrekking op het formaat van het bestand waarin de gegevens in gecomprimeerde vorm zijn opgenomen, b.v. om de grootte van het downloadbare bestand te verkleinen."
+      }
+    },
+    {
+      "field_name": "download_url",
+      "label": "Download URL",
+      "display_snippet": "link.html",
+      "help_inline": true,
+      "help_text": {
+        "en": "[dcat:downloadURL] This property contains a URL that is a direct link to a downloadable file in a given format.",
+        "nl": "[dcat:downloadURL] Deze eigenschap bevat een URL die een directe link is naar een downloadbaar bestand in een bepaald formaat."
+      }
+    },
+    {
+      "field_name": "mimetype",
+      "label": "Mime Type",
+      "help_inline": true,
+      "help_text": {
+        "en": "[dcat:mediaType] This property refers to the media type of the Distribution as defined in the official register of media types managed by IANA.",
+        "nl": "[dcat:mediaType] Deze eigenschap verwijst naar het mediatype van de Distributie zoals gedefinieerd in het officiële register van mediatypen beheerd door IANA."
+      }
+    },
+    {
+      "field_name": "package_format",
+      "label": {
+        "en": "Package Format",
+        "nl": "Pakketformaat"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dcat:packageFormat] This property refers to the format of the file in which one or more data files are grouped together, e.g. to enable a set of related files to be downloaded together.",
+        "nl": "[dcat:packageFormat] Deze eigenschap heeft betrekking op het formaat van het bestand waarin een of meer gegevensbestanden zijn gegroepeerd, b.v. om het mogelijk te maken dat een reeks gerelateerde bestanden samen worden gedownload."
+      }
+    },
+    {
+      "field_name": "spatial_resolution_in_meters",
+      "label": {
+        "en": "Spatial Resolution in Meters",
+        "nl": "Ruimtelijke resolutie in meters"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dcat:spatialResolutionInMeters] This property refers to the minimum spatial separation resolvable in a dataset, measured in meters.",
+        "nl": "[dcat:spatialResolutionInMeters] Deze eigenschap verwijst naar de minimale ruimtelijke scheiding die in een dataset kan worden opgelost, gemeten in meters."
+      }
+    },
+    {
+      "field_name": "temporal_resolution",
+      "label": {
+        "en": "Temporal Resolution",
+        "nl": "Tijdelijke resolutie"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dcat:temporalResolution] This property refers to the minimum time period resolvable in the dataset.",
+        "nl": "[dcat:temporalResolution] Deze eigenschap verwijst naar de minimale tijdsperiode die in de gegevensset kan worden opgelost."
+      }
+    },
+    {
+      "field_name": "conforms_to",
+      "label": {
+        "en": "Conforms to",
+        "nl": "Overeenkomstig met"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:conformsTo] This property refers to an implementing rule or other specification.",
+        "nl": "[dct:conformsTo] Deze eigenschap verwijst naar een implementatieregel of andere specificatie."
+      }
+    },
+    {
+      "field_name": "issued",
+      "label": {
+        "en": "Issued",
+        "nl": "Uitgiftedatum"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:issued] This property contains the date of formal issuance (e.g., publication) of the Dataset.",
+        "nl": "[dct:issued] Deze eigenschap bevat de datum van formele uitgifte (bijvoorbeeld publicatie) van de dataset."
+      },
+      "preset": "date"
+    },
+    {
+      "field_name": "language",
+      "label": {
+        "en": "Language",
+        "nl": "Taal"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:language] This property refers to a language of the Dataset. This property can be repeated if there are multiple languages in the Dataset.",
+        "nl": "[dct:language] Deze eigenschap verwijst naar een taal van de gegevensset. Deze eigenschap kan worden herhaald als de gegevensset meerdere talen bevat."
+      }
+    },
+    {
+      "field_name": "modified",
+      "label": {
+        "en": "Modification Date",
+        "nl": "Wijzigingsdatum"
+      },
+      "preset": "date",
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:modified] This property contains the most recent date on which the Dataset was changed or modified.",
+        "nl": "[dct:modified] Deze eigenschap bevat de meest recente datum waarop de dataset is gewijzigd of aangepast."
+      }
+    },
+    {
+      "field_name": "rights",
+      "label": {
+        "en": "Rights",
+        "nl": "Rechten"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[dct:rights] This property refers to a statement that specifies rights associated with the Distribution.",
+        "nl": "[dct:rights] Deze eigenschap verwijst naar een verklaring die de rechten specificeert die verband houden met de Distributie."
+      }
+    },
+    {
+      "field_name": "documentation",
+      "label": {
+        "en": "Documentation",
+        "nl": "Documentatie"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[foaf:page] This property refers to a page or document about this Distribution.",
+        "nl": "[foaf:page] Deze eigenschap verwijst naar een pagina of document over deze distributie."
+      }
+    },
+    {
+      "field_name": "has_policy",
+      "label": {
+        "en": "Has Policy",
+        "nl": "Heeft beleid"
+      },
+      "help_inline": true,
+      "help_text": {
+        "en": "[odrl:hasPolicy] This property refers to the policy expressing the rights associated with the distribution if using the ODRL vocabulary.",
+        "nl": "[odrl:hasPolicy] Deze eigenschap verwijst naar het beleid dat de rechten uitdrukt die aan de distributie zijn gekoppeld bij gebruik van de ODRL-vocabulaire"
+      }
+    },
+    {
+      "field_name": "hash",
+      "label": "Hash",
+      "help_inline": true,
+      "help_text": {
+        "en": "[spdx:checksumValue] This property provides a lower case hexadecimal encoded digest value produced using a specific algorithm.",
+        "nl": "[spdx:checksumValue] Deze eigenschap biedt een hexadecimaal gecodeerde samenvattingswaarde in kleine letters, geproduceerd met behulp van een specifiek algoritme."
+      }
+    },
+    {
+      "field_name": "hash_algorithm",
+      "label": "Hash Algorithm",
+      "help_inline": true,
+      "help_text": {
+        "en": "[spdx:algorithm] This property identifies the algorithm used to produce the subject Checksum. ",
+        "nl": "[spdx:algorithm] Deze eigenschap identificeert het algoritme dat wordt gebruikt om het onderwerp Checksum te produceren."
+      }
+    }
+  ]
+}

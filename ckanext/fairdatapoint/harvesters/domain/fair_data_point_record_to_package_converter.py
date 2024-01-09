@@ -1,3 +1,8 @@
+# File original (C) Civity
+# File modified by Stichting Health-RI in January 2024 to remove custom exception and dependency on
+#  Civity-specific record provider
+# All changes are © Stichting Health-RI and are licensed under the AGPLv3 license
+
 import logging
 
 from ckanext.fairdatapoint.harvesters.domain.identifier import Identifier
