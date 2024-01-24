@@ -49,24 +49,23 @@ class FairDataPointRecordProvider:
 
         catalogs_graph = self.fair_data_point.get_graph(path)
 
-        if catalogs_graph is not None:
-            for catalog_subject in catalogs_graph.subjects(RDF.type, DCAT.Catalog):
+        for catalog_subject in catalogs_graph.subjects(RDF.type, DCAT.Catalog):
+            identifier = Identifier('')
+
+            identifier.add('catalog', str(catalog_subject))
+
+            result[identifier.guid] = catalog_subject
+
+            catalog_graph = self.fair_data_point.get_graph(catalog_subject)
+
+            for dataset_subject in catalog_graph.objects(predicate=DCAT.dataset):
                 identifier = Identifier('')
 
                 identifier.add('catalog', str(catalog_subject))
 
-                result[identifier.guid] = catalog_subject
+                identifier.add('dataset', str(dataset_subject))
 
-                catalog_graph = self.fair_data_point.get_graph(catalog_subject)
-
-                for dataset_subject in catalog_graph.objects(predicate=DCAT.dataset):
-                    identifier = Identifier('')
-
-                    identifier.add('catalog', str(catalog_subject))
-
-                    identifier.add('dataset', str(dataset_subject))
-
-                    result[identifier.guid] = dataset_subject
+                result[identifier.guid] = dataset_subject
 
         return result
 
