@@ -1,13 +1,13 @@
-from rdflib import RDF, Namespace
+from rdflib import RDF, DCAT
+from rdflib.term import Node
+from typing import Iterable, Dict
 
 from ckanext.dcat.processors import RDFParser
-
-DCAT = Namespace("http://www.w3.org/ns/dcat#")
 
 
 class FairDataPointRDFParser(RDFParser):
 
-    def _catalogs(self):
+    def _catalogs(self) -> Iterable[Node]:
         """
         Generator that returns all DCAT catalogs on the graph
 
@@ -17,7 +17,7 @@ class FairDataPointRDFParser(RDFParser):
         for catalog in self.g.subjects(RDF.type, DCAT.Catalog):
             yield catalog
 
-    def catalogs(self):
+    def catalogs(self) -> Iterable[Dict]:
         """
         Generator that returns CKAN catalogs parsed from the RDF graph
 

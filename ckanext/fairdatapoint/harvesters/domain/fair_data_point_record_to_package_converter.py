@@ -12,12 +12,12 @@ from ckanext.fairdatapoint.processors import FairDataPointRDFParser
 log = logging.getLogger(__name__)
 
 
-class FairDataPointRecordToPackageConverter():
+class FairDataPointRecordToPackageConverter:
 
-    def __init__(self, profile):
+    def __init__(self, profile: str):
         self.profile = profile
 
-    def record_to_package(self, guid, record):
+    def record_to_package(self, guid: str, record: str):
         parser = FairDataPointRDFParser(profiles=[self.profile])
 
         try:
