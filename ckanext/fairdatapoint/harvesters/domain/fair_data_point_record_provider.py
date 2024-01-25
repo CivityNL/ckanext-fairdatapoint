@@ -11,37 +11,25 @@ import requests
 from ckanext.fairdatapoint.harvesters.domain.identifier import Identifier
 from ckanext.fairdatapoint.harvesters.domain.fair_data_point import FairDataPoint
 
-from rdflib import Namespace, URIRef, Literal
-from rdflib.namespace import RDF
+from rdflib import Namespace, URIRef, Literal, DCAT, DCTERMS, Graph, RDF
+from rdflib.term import Node
+from typing import Dict, Iterable, Union
 
-DC_TERMS = 'http://purl.org/dc/terms/'
-DC_TERMS_DESCRIPTION = DC_TERMS + 'description'
-DC_TERMS_FORMAT = DC_TERMS + 'format'
-DC_TERMS_LICENSE = DC_TERMS + 'license'
-DC_TERMS_TITLE = DC_TERMS + 'title'
 
-DCAT = 'http://www.w3.org/ns/dcat#'
-DCAT_ACCESS_URL = DCAT + 'accessURL'
-DCAT_CONTACT_POINT = DCAT + 'contactPoint'
-
-LDP = 'http://www.w3.org/ns/ldp#'
+LDP = Namespace('http://www.w3.org/ns/ldp#')
+VCARD = Namespace('http://www.w3.org/2006/vcard/ns#')
 
 log = logging.getLogger(__name__)
 
 
+class FairDataPointRecordProvider:
 
-
-
-class FairDataPointRecordProvider():
-    dcat = Namespace(DCAT)
-    ldp = Namespace(LDP)
-
-    def __init__(self, fdp_end_point):
+    def __init__(self, fdp_end_point: str):
         self.fair_data_point = FairDataPoint(fdp_end_point)
 
-    def get_record_ids(self):
+    def get_record_ids(self) -> Dict.keys:
         """
-        Return all the FDP records which should end up as packages in CKAN to populate the "guids_in_harvest" list
+        Returns all the FDP records which should end up as packages in CKAN to populate the "guids_in_harvest" list
         https://rdflib.readthedocs.io/en/stable/intro_to_parsing.html
         """
         log.debug('FAIR Data Point get_records from {}'.format(self.fair_data_point.fdp_end_point))
@@ -50,44 +38,43 @@ class FairDataPointRecordProvider():
 
         fdp_graph = self.fair_data_point.get_graph(self.fair_data_point.fdp_end_point)
 
-        contains_predicate = URIRef(LDP + 'contains')
+        contains_predicate = LDP.contains
         for contains_object in fdp_graph.objects(predicate=contains_predicate):
             result.update(self._process_catalog(str(contains_object)))
 
         return result.keys()
 
-    def _process_catalog(self, path):
+    def _process_catalog(self, path: Union[str, URIRef]) -> Dict:
         result = dict()
 
         catalogs_graph = self.fair_data_point.get_graph(path)
 
-        if catalogs_graph is not None:
-            for catalog_subject in catalogs_graph.subjects(RDF.type, self.dcat.Catalog):
+        for catalog_subject in catalogs_graph.subjects(RDF.type, DCAT.Catalog):
+            identifier = Identifier('')
+
+            identifier.add('catalog', str(catalog_subject))
+
+            result[identifier.guid] = catalog_subject
+
+            catalog_graph = self.fair_data_point.get_graph(catalog_subject)
+
+            for dataset_subject in catalog_graph.objects(predicate=DCAT.dataset):
                 identifier = Identifier('')
 
                 identifier.add('catalog', str(catalog_subject))
 
-                result[identifier.guid] = catalog_subject
+                identifier.add('dataset', str(dataset_subject))
 
-                catalog_graph = self.fair_data_point.get_graph(catalog_subject)
-
-                dataset_predicate = URIRef(DCAT + 'dataset')
-                for dataset_subject in catalog_graph.objects(predicate=dataset_predicate):
-                    identifier = Identifier('')
-
-                    identifier.add('catalog', str(catalog_subject))
-
-                    identifier.add('dataset', str(dataset_subject))
-
-                    result[identifier.guid] = dataset_subject
+                result[identifier.guid] = dataset_subject
 
         return result
 
-    def get_record_by_id(self, guid):
+    def get_record_by_id(self, guid: str) -> str:
         """
         Get additional information for FDP record.
         """
-        log.debug('FAIR data point get_record_by_id from {} for {}'.format(self.fair_data_point.fdp_end_point, guid))
+        log.debug(
+            'FAIR data point get_record_by_id from {} for {}'.format(self.fair_data_point.fdp_end_point, guid))
 
         identifier = Identifier(guid)
 
@@ -97,33 +84,28 @@ class FairDataPointRecordProvider():
 
         subject_uri = URIRef(subject_url)
 
-        distribution_predicate_uri = URIRef(DCAT + 'distribution')
-
         # Add information from distribution to graph
-        for distribution_uri in g.objects(subject=subject_uri, predicate=distribution_predicate_uri):
+        for distribution_uri in g.objects(subject=subject_uri, predicate=DCAT.distribution):
             distribution_g = self.fair_data_point.get_graph(distribution_uri)
 
-            distribution = URIRef(distribution_uri)
-
             for predicate in [
-                DC_TERMS_DESCRIPTION,
-                DC_TERMS_FORMAT,
-                DC_TERMS_LICENSE,
-                DC_TERMS_TITLE,
-                DCAT_ACCESS_URL
+                DCTERMS.description,
+                DCTERMS.format,
+                DCTERMS.license,
+                DCTERMS.title,
+                DCAT.accessURL
             ]:
-                for literal in self.get_values(distribution_g, distribution_uri, predicate):
-                    g.add((distribution, URIRef(predicate), literal))
+                for distr_attribute_value in self.get_values(distribution_g, distribution_uri, predicate):
+                    g.add((distribution_uri, predicate, distr_attribute_value))
 
         # Look-up contact information
-        contact_point_predicate_uri = URIRef(DCAT_CONTACT_POINT)
-        for contact_point_uri in self.get_values(g, subject_uri, contact_point_predicate_uri):
+        for contact_point_uri in self.get_values(g, subject_uri, DCAT.contactPoint):
             if 'orcid' in contact_point_uri:
-                orcid_response = requests.get(contact_point_uri + '/public-record.json')
+                orcid_response = requests.get(str(contact_point_uri) + '/public-record.json')
                 json_orcid_response = orcid_response.json()
                 name = json_orcid_response['displayName']
                 name_literal = Literal(name)
-                g.add((subject_uri, URIRef('http://www.w3.org/2006/vcard/ns#fn'), name_literal))
+                g.add((subject_uri, VCARD.fn, name_literal))
                 # TODO add original Orcid URL in a field
 
         result = g.serialize(format='ttl')
@@ -131,7 +113,9 @@ class FairDataPointRecordProvider():
         return result
 
     @staticmethod
-    def get_values(graph, subject, predicate):
+    def get_values(graph: Graph,
+                   subject: Union[str, URIRef, Node],
+                   predicate: Union[str, URIRef, Node]) -> Iterable[Node]:
         subject_uri = URIRef(subject)
         predicate_uri = URIRef(predicate)
 

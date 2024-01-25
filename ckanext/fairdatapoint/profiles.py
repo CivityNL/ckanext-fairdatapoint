@@ -7,15 +7,18 @@ from ckanext.dcat.profiles import EuropeanDCATAP2Profile
 from ckan.plugins import toolkit
 from ckan import model
 import json
+from typing import Dict
+from rdflib import URIRef
 
-def _convert_extras_to_declared_schema_fields(dataset_dict):
-    '''
+
+def _convert_extras_to_declared_schema_fields(dataset_dict: Dict) -> Dict:
+    """
     Compares the extras dictionary with the declared schema.
     Updates the declared schema fields with the values that match from the extras.
     Remove the extras that are present on the declared schema.
     :param dataset_dict:
     :return: dataset_dict - Updated dataset_dict
-    '''
+    """
     # Use the correct dataset type, Defaults to 'dataset'
     dataset_type = dataset_dict.get('type', 'dataset')
     # Gets the full Schema definition of the correct dataset type
@@ -23,7 +26,7 @@ def _convert_extras_to_declared_schema_fields(dataset_dict):
     data_dict = {'type': dataset_type}
     full_schema_dict = toolkit.get_action('scheming_dataset_schema_show')(context, data_dict)
 
-    dataset_fields = { x.get('field_name') : x.get('preset') for x in full_schema_dict.get('dataset_fields', []) }
+    dataset_fields = {x.get('field_name'): x.get('preset') for x in full_schema_dict.get('dataset_fields', [])}
 
     # Populate the declared schema fields, if they are present in the extras
     for extra_dict in dataset_dict.get('extras', []):
@@ -46,14 +49,15 @@ class FAIRDataPointDCATAPProfile(EuropeanDCATAP2Profile):
     An RDF profile for FAIR data points
     """
 
-    def parse_dataset(self, dataset_dict, dataset_ref):
+    def parse_dataset(self, dataset_dict: Dict, dataset_ref: URIRef) -> Dict:
         super(FAIRDataPointDCATAPProfile, self).parse_dataset(dataset_dict, dataset_ref)
 
         dataset_dict = _convert_extras_to_declared_schema_fields(dataset_dict)
 
         # Example of adding a field
         dataset_dict['extras'].append({'key': 'hello',
-                                       'value': "Hello from the FAIR data point profile. Use this function to do FAIR data point specific stuff during the import stage"})
+                                       'value': "Hello from the FAIR data point profile. Use this function to do "
+                                                "FAIR data point specific stuff during the import stage"})
 
         return dataset_dict
 

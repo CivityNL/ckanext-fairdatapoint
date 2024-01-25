@@ -291,7 +291,7 @@ class CivityHarvester(HarvesterBase):
                         str(package_dict['title'])))
                 self._save_object_error(
                     'TypeError: error generating package name. Package title [%s] is not a string.' %
-                    (str(package_dict['title']), harvest_object)
+                    str(package_dict['title']), harvest_object
                 )
                 return False
 
