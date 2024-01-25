@@ -4,6 +4,7 @@
 
 import logging
 import requests
+import encodings
 
 from rdflib import Graph, URIRef
 from rdflib.exceptions import ParserError
@@ -44,6 +45,7 @@ class FairDataPoint:
         }
         try:
             response = requests.request("GET", path, headers=headers)
+            response.encoding = encodings.utf_8.getregentry().name
             response.raise_for_status()
             return response.text
         except (HTTPError, ConnectionError, Timeout, RequestException) as e:
