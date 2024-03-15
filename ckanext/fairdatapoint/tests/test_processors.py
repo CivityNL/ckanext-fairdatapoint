@@ -17,6 +17,8 @@
 """
 
 import pytest
+from datetime import datetime
+from dateutil.tz import tzutc
 from pathlib import Path
 from unittest.mock import patch
 from rdflib import Graph
@@ -59,10 +61,7 @@ class TestProcessors:
             record=data)
         expected_dataset = {"extras":
             [
-                {"key": "uri", "value": "https://covid19initiatives.health-ri.nl/p/Project/27866022694497978"},
-                {"key": "hello",
-                 "value": "Hello from the FAIR data point profile. Use this function to do FAIR data point "
-                          "specific stuff during the import stage"}
+                {"key": "uri", "value": "https://covid19initiatives.health-ri.nl/p/Project/27866022694497978"}
             ],
             "resources": [],
             "title": "COVID-NL cohort MUMC+",
@@ -73,8 +72,8 @@ class TestProcessors:
             "has_version": ["https://repo.metadatacenter.org/template-instances/2836bf1c-76e9-44e7-a65e-80e9ca63025a"],
             "contact_uri": "https://orcid.org/0000-0002-4348-707X",
             "publisher_uri": "https://opal.health-ri.nl/pub/",
-            "temporal_start": "2020-01-01",
-            "temporal_end": "2025-12-31"}
+            "temporal_start": datetime(2020, 1, 1, 0, 0),
+            "temporal_end": datetime(2025, 12, 31, 0, 0)}
         assert actual_dataset == expected_dataset
 
     def test_fdp_record_converter_catalog_dict(self):
@@ -84,25 +83,22 @@ class TestProcessors:
             guid="catalog=https://fair.healthinformationportal.eu/catalog/1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d",
             record=data)
         expected = {
-                       "access_rights": "https://fair.healthinformationportal.eu/catalog/"
-                                        "1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d#accessRights",
-                       "conforms_to": ["https://fair.healthinformationportal.eu/profile/"
-                                      "a0949e72-4466-4d53-8900-9436d1049a4b"],
-                       "extras": [{"key": "uri",
-                                   "value": "https://fair.healthinformationportal.eu/catalog/"
-                                            "1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d"},
-                                  {"key": "hello",
-                                   "value": "Hello from the FAIR data point profile. Use this "
-                                            "function to do FAIR data point specific stuff during "
-                                            "the import stage"}],
-                       "has_version": ["1.0"],
-                       "issued": "2023-10-06T10:12:55.614000+00:00",
-                       "language": ["http://id.loc.gov/vocabulary/iso639-1/en"],
-                       "license_id": "",
-                       "modified": "2023-10-06T10:12:55.614000+00:00",
-                       "publisher_name": "Automatic",
-                       "resources": [],
-                       "tags": [],
-                       "title": "Slovenia National Node"
+            "access_rights": "https://fair.healthinformationportal.eu/catalog/"
+                             "1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d#accessRights",
+            "conforms_to": ["https://fair.healthinformationportal.eu/profile/"
+                            "a0949e72-4466-4d53-8900-9436d1049a4b"],
+            "extras": [{"key": "uri",
+                        "value": "https://fair.healthinformationportal.eu/catalog/"
+                                 "1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d"},
+                       ],
+            "has_version": ["1.0"],
+            "issued": datetime(2023, 10, 6, 10, 12, 55, 614000, tzinfo=tzutc()),
+            "language": ["http://id.loc.gov/vocabulary/iso639-1/en"],
+            "license_id": "",
+            "modified": datetime(2023, 10, 6, 10, 12, 55, 614000, tzinfo=tzutc()),
+            "publisher_name": "Automatic",
+            "resources": [],
+            "tags": [],
+            "title": "Slovenia National Node"
         }
         assert actual == expected
