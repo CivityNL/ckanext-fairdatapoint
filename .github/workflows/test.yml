@@ -10,7 +10,7 @@ jobs:
       image: openknowledge/ckan-dev:2.10
     services:
       solr:
-        image: ckan/ckan-solr-dev:2.9
+        image: ckan/ckan-solr-dev:2.10
       postgres:
         image: ckan/ckan-postgres-dev:2.10
         env:

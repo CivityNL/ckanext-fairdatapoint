@@ -63,7 +63,7 @@ To install ckanext-fairdatapoint:
 
 2. Clone the source and install it on the virtualenv
 
-    git clone https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-fairdatapoint.git
+    git clone https://github.com/CivityNL/ckanext-fairdatapoint.git
     cd ckanext-fairdatapoint
     pip install -e .
 	pip install -r requirements.txt
