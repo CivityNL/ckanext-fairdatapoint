@@ -21,7 +21,7 @@ from datetime import datetime
 from dateutil.tz import tzutc, tzoffset
 from pathlib import Path
 from rdflib import Graph, URIRef
-from ckanext.fairdatapoint.profiles import validate_tags, convert_datetime_string, FAIRDataPointDCATAPProfile
+from ckanext.fairdatapoint.profiles import validate_tags, convert_datetime_string
 from ckanext.fairdatapoint.harvesters.domain.fair_data_point_record_to_package_converter import (
     FairDataPointRecordToPackageConverter)
 
@@ -93,7 +93,7 @@ def test_parse_dataset():
     ("2023-10-06T10:12:55.614000+00:00",
      datetime(2023, 10, 6, 10, 12, 55, 614000, tzinfo=tzutc())),
     ("2024-02-15 11:16:37+03:00",
-     datetime(2024, 2, 5, 11, 16, 37, tzinfo=tzoffset(None, 10800))),
+     datetime(2024, 2, 15, 11, 16, 37, tzinfo=tzoffset(None, 10800))),
     ("November 9, 1999", datetime(1999, 11, 9, 0, 0, 0)),
     ("2006-09", datetime(2006, 9, 18))])
 def test_convert_datetime_string(input_timestring, expected_output):
