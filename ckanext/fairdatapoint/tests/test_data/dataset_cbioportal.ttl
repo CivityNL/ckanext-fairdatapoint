@@ -1,0 +1,66 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ldp: <http://www.w3.org/ns/ldp#> .
+@prefix ns1: <https://w3id.org/fdp/fdp-o#> .
+@prefix ns2: <http://semanticscience.org/resource/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://health-ri.sandbox.semlab-leiden.nl/distribution/> a ldp:DirectContainer ;
+    dcterms:title "Distributions" ;
+    ldp:contains <https://health-ri.sandbox.semlab-leiden.nl/distribution/931ed9c4-ad23-47ff-b121-2eb428e57423>,
+        <https://health-ri.sandbox.semlab-leiden.nl/distribution/ad00299f-6efb-42aa-823d-5ff2337f38f7> ;
+    ldp:hasMemberRelation dcat:distribution ;
+    ldp:membershipResource <https://health-ri.sandbox.semlab-leiden.nl/dataset/d9956191-1aff-4181-ac8b-16b829135ed5> .
+
+<https://health-ri.sandbox.semlab-leiden.nl/dataset/d9956191-1aff-4181-ac8b-16b829135ed5> a dcat:Dataset,
+        dcat:Resource ;
+    rdfs:label "[PUBLIC] Low-Grade Gliomas (UCSF, Science 2014)" ;
+    dcterms:accessRights <https://health-ri.sandbox.semlab-leiden.nl/dataset/d9956191-1aff-4181-ac8b-16b829135ed5#accessRights> ;
+    dcterms:conformsTo <https://health-ri.sandbox.semlab-leiden.nl/profile/2f08228e-1789-40f8-84cd-28e3288c3604> ;
+    dcterms:description "Whole exome sequencing of 23 grade II glioma tumor/normal pairs." ;
+    dcterms:identifier "lgg_ucsf_2014"^^xsd:token ;
+    dcterms:isPartOf <https://health-ri.sandbox.semlab-leiden.nl/catalog/5c85cb9f-be4a-406c-ab0a-287fa787caa0> ;
+    dcterms:isReferencedBy <https://pubmed.ncbi.nlm.nih.gov/24336570> ;
+    dcterms:issued "2019-10-30 23:00:00" ;
+    dcterms:language <http://id.loc.gov/vocabulary/iso639-1/en> ;
+    dcterms:license <http://rdflicense.appspot.com/rdflicense/cc-by-nc-nd3.0> ;
+    dcterms:modified "2019-10-30 23:00:00" ;
+    dcterms:publisher <https://www.health-ri.nl> ;
+    dcterms:temporal [ a dcterms:PeriodOfTime ] ;
+    dcterms:title "[PUBLIC] Low-Grade Gliomas (UCSF, Science 2014)" ;
+    ns2:SIO_000628 <https://health-ri.sandbox.semlab-leiden.nl/dataset/d9956191-1aff-4181-ac8b-16b829135ed5/metrics/445c0a70d1e214e545b261559e2842f4>,
+        <https://health-ri.sandbox.semlab-leiden.nl/dataset/d9956191-1aff-4181-ac8b-16b829135ed5/metrics/5d27e854a9e78eb3f663331cd47cdc13> ;
+    dcat:distribution <https://health-ri.sandbox.semlab-leiden.nl/distribution/931ed9c4-ad23-47ff-b121-2eb428e57423>,
+        <https://health-ri.sandbox.semlab-leiden.nl/distribution/ad00299f-6efb-42aa-823d-5ff2337f38f7> ;
+    dcat:keyword "CNS/Brain",
+        "Diffuse Glioma",
+        "Glioma" ;
+    dcat:landingPage <https://cbioportal.health-ri.nl/study/summary?id=lgg_ucsf_2014> ;
+    ns1:metadataIdentifier <https://health-ri.sandbox.semlab-leiden.nl/dataset/d9956191-1aff-4181-ac8b-16b829135ed5#identifier> ;
+    ns1:metadataIssued "2024-01-22T12:58:04.249592+00:00"^^xsd:dateTime ;
+    ns1:metadataModified "2024-01-22T12:58:05.109355+00:00"^^xsd:dateTime .
+
+<https://health-ri.sandbox.semlab-leiden.nl/dataset/d9956191-1aff-4181-ac8b-16b829135ed5#accessRights> a dcterms:RightsStatement ;
+    dcterms:description "This resource has no access restriction" .
+
+<https://health-ri.sandbox.semlab-leiden.nl/dataset/d9956191-1aff-4181-ac8b-16b829135ed5#identifier> a <http://purl.org/spar/datacite/Identifier> ;
+    dcterms:identifier "https://health-ri.sandbox.semlab-leiden.nl/dataset/d9956191-1aff-4181-ac8b-16b829135ed5" .
+
+<https://health-ri.sandbox.semlab-leiden.nl/dataset/d9956191-1aff-4181-ac8b-16b829135ed5/metrics/445c0a70d1e214e545b261559e2842f4> ns2:SIO_000332 <https://www.ietf.org/rfc/rfc3986.txt> ;
+    ns2:SIO_000628 <https://www.ietf.org/rfc/rfc3986.txt> .
+
+<https://health-ri.sandbox.semlab-leiden.nl/dataset/d9956191-1aff-4181-ac8b-16b829135ed5/metrics/5d27e854a9e78eb3f663331cd47cdc13> ns2:SIO_000332 <https://www.wikidata.org/wiki/Q8777> ;
+    ns2:SIO_000628 <https://www.wikidata.org/wiki/Q8777> .
+
+<https://health-ri.sandbox.semlab-leiden.nl/profile/2f08228e-1789-40f8-84cd-28e3288c3604> rdfs:label "Dataset Profile" .
+
+<https://health-ri.sandbox.semlab-leiden.nl/distribution/931ed9c4-ad23-47ff-b121-2eb428e57423> dcterms:description "Clinical data for [PUBLIC] Low-Grade Gliomas (UCSF, Science 2014)" ;
+    dcterms:license <http://rdflicense.appspot.com/rdflicense/cc-by-nc-nd3.0> ;
+    dcterms:title "Clinical data for [PUBLIC] Low-Grade Gliomas (UCSF, Science 2014)" ;
+    dcat:accessURL <https://cbioportal.health-ri.nl/study/clinicalData?id=lgg_ucsf_2014> .
+
+<https://health-ri.sandbox.semlab-leiden.nl/distribution/ad00299f-6efb-42aa-823d-5ff2337f38f7> dcterms:description "Mutation data from whole exome sequencing of 23 grade II glioma tumor/normal pairs. (MAF)" ;
+    dcterms:license <http://rdflicense.appspot.com/rdflicense/cc-by-nc-nd3.0> ;
+    dcterms:title "Mutations" ;
+    dcat:accessURL <https://cbioportal.health-ri.nl/study/summary?id=lgg_ucsf_2014> .
