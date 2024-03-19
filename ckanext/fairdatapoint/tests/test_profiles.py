@@ -95,7 +95,7 @@ def test_parse_dataset():
     ("2024-02-15 11:16:37+03:00",
      datetime(2024, 2, 15, 11, 16, 37, tzinfo=tzoffset(None, 10800))),
     ("November 9, 1999", datetime(1999, 11, 9, 0, 0, 0)),
-    ("2006-09", datetime(2006, 9, 18))])
+    ("2006-09", datetime(2006, 9, datetime.today().day))])
 def test_convert_datetime_string(input_timestring, expected_output):
     actual = convert_datetime_string(input_timestring)
     assert actual == expected_output
