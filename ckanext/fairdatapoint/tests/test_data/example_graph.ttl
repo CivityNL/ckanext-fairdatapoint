@@ -1,0 +1,10 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://example.com> dcterms:temporal [ a dcterms:PeriodOfTime ;
+            dcat:endDate "14-05-2023" ;
+            dcat:startDate "21-12-2021" ] .
+
+<https://example.com/123> dcterms:identifier "123"^^xsd:token .
+

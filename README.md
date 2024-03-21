@@ -7,9 +7,9 @@ CKAN extension for FAIR data points. Contains a harvester for FAIR data points. 
 ## Stages
 
 The harvester runs in three stages. Each of these stages can be modified.
- 1. Gather stage. The gather stage uses the FairDataPointRecordProvider which implements the IRecordProvider interface to create a list of identifiers of the objects which should be included in the harvest. In case of a FAIR datab point, this list inlcudes catalogs and datasets. In the future, collections could be added;
+ 1. Gather stage. The gather stage uses the FairDataPointRecordProvider which implements the IRecordProvider interface to create a list of identifiers of the objects which should be included in the harvest. In case of a FAIR data point, this list includes catalogs and datasets. In the future, collections could be added;
  2. Fetch stage. The fetch stage downloads the actual source data. In this phase, additional data from other sources may be included to better suit the DCAT profile as expected by CKAN;
- 3. Import stage. The import stage does the actual import. How the RDF from the FAIR data point is mapped to CKAN packages and resources is determined by so called application profiles. In case of a FAIR data point which uses custom fields, a profile must be created. A profile can be definied as a Python class in the the ckanext.fairdatapoint.profiles.py file. The new profile must be registered in the [ckan.rdf.profiles] section of setup.py. What profile is being used for a particular is determined by the harvester configuration. 
+ 3. Import stage. The import stage does the actual import. How the RDF from the FAIR data point is mapped to CKAN packages and resources is determined by so-called application profiles. In case of a FAIR data point which uses custom fields, a profile must be created. A profile can be defined as a Python class in the ckanext.fairdatapoint.profiles.py file. The new profile must be registered in the [ckan.rdf.profiles] section of setup.py. What profile is being used for a particular is determined by the harvester configuration. 
 
 ``
 {
@@ -98,6 +98,14 @@ do:
     python setup.py develop
     pip install -r dev-requirements.txt
 
+Fairdatapoint plugin depends on `ckanext-scheming`, `ckanext-harvester` and `ckanext-dcat`. Make sure these are installed,
+otherwise run:
+```commandline
+pip install -e 'git+https://github.com/ckan/ckanext-scheming.git@release-3.0.0#egg=ckanext-scheming[requirements]'
+pip install -e 'git+https://github.com/ckan/ckanext-harvest.git@v1.5.6#egg=ckanext-harvest[requirements]'
+pip install -e 'git+https://github.com/ckan/ckanext-dcat.git@v1.5.1#egg=ckanext-dcat'
+pip install -r https://raw.githubusercontent.com/ckan/ckanext-dcat/v1.5.1/requirements.txt
+```
 
 ## Tests
 

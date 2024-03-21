@@ -1,4 +1,7 @@
-from ckanext.civity.harvesters.civity_harvester import CivityHarvester, CivityHarvesterException
+# File original (C) Civity
+# File modified by Stichting Health-RI to allow for a non-custom exception
+# All changes are © Stichting Health-RI and are licensed under the AGPLv3 license
+from ckanext.fairdatapoint.harvesters.civity_harvester import CivityHarvester
 from ckanext.fairdatapoint.harvesters.domain.fair_data_point_record_provider import FairDataPointRecordProvider
 from ckanext.fairdatapoint.harvesters.domain.fair_data_point_record_to_package_converter import \
     FairDataPointRecordToPackageConverter
@@ -15,7 +18,7 @@ class FairDataPointCivityHarvester(CivityHarvester):
         if PROFILE in harvest_config_dict:
             self.record_to_package_converter = FairDataPointRecordToPackageConverter(harvest_config_dict.get(PROFILE))
         else:
-            raise CivityHarvesterException('[{0}] not found in harvester config JSON'.format(PROFILE))
+            raise Exception('[{0}] not found in harvester config JSON'.format(PROFILE))
 
     def info(self):
         return {

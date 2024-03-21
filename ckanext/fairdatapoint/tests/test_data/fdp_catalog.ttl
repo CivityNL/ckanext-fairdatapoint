@@ -1,0 +1,51 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ldp: <http://www.w3.org/ns/ldp#> .
+@prefix ns1: <http://semanticscience.org/resource/> .
+@prefix ns2: <https://w3id.org/fdp/fdp-o#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://fair.healthinformationportal.eu/dataset/> a ldp:DirectContainer ;
+    dcterms:title "Datasets" ;
+    ldp:contains <https://fair.healthinformationportal.eu/dataset/125c32c0-3aa8-4277-92f6-34acdd058d43>;
+    ldp:hasMemberRelation dcat:dataset ;
+    ldp:membershipResource <https://fair.healthinformationportal.eu/catalog/1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d> .
+
+<https://fair.healthinformationportal.eu/catalog/1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d> a dcat:Catalog,
+        dcat:Resource ;
+    rdfs:label "Slovenia National Node" ;
+    dcterms:accessRights <https://fair.healthinformationportal.eu/catalog/1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d#accessRights> ;
+    dcterms:conformsTo <https://fair.healthinformationportal.eu/profile/a0949e72-4466-4d53-8900-9436d1049a4b> ;
+    dcterms:hasVersion "1.0" ;
+    dcterms:isPartOf <https://fair.healthinformationportal.eu> ;
+    dcterms:issued "2023-10-06T10:12:55.614000+00:00"^^xsd:dateTime ;
+    dcterms:language <http://id.loc.gov/vocabulary/iso639-1/en> ;
+    dcterms:license <http://rdflicense.appspot.com/rdflicense/cc-by-nc-nd3.0> ;
+    dcterms:modified "2023-10-06T10:12:55.614000+00:00"^^xsd:dateTime ;
+    dcterms:publisher [ a foaf:Agent ;
+            foaf:name "Automatic" ] ;
+    dcterms:title "Slovenia National Node"@en ;
+    ns1:SIO_000628 <https://fair.healthinformationportal.eu/catalog/1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d/metrics/445c0a70d1e214e545b261559e2842f4>,
+        <https://fair.healthinformationportal.eu/catalog/1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d/metrics/5d27e854a9e78eb3f663331cd47cdc13> ;
+    dcat:dataset <https://fair.healthinformationportal.eu/dataset/125c32c0-3aa8-4277-92f6-34acdd058d43> ;
+    dcat:themeTaxonomy <http://edamontology.org/topic_3324>,
+        <https://www.wikidata.org/wiki/Q98299735> ;
+    ns2:metadataIdentifier <https://fair.healthinformationportal.eu/catalog/1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d#identifier> ;
+    ns2:metadataIssued "2023-10-06T10:12:55.614000+00:00"^^xsd:dateTime ;
+    ns2:metadataModified "2023-10-25T14:02:23.680000+00:00"^^xsd:dateTime .
+
+<https://fair.healthinformationportal.eu/catalog/1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d#accessRights> a dcterms:RightsStatement ;
+    dcterms:description "This resource has no access restriction" .
+
+<https://fair.healthinformationportal.eu/catalog/1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d#identifier> a <http://purl.org/spar/datacite/Identifier> ;
+    dcterms:identifier "https://fair.healthinformationportal.eu/catalog/1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d" .
+
+<https://fair.healthinformationportal.eu/catalog/1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d/metrics/445c0a70d1e214e545b261559e2842f4> ns1:SIO_000332 <https://www.ietf.org/rfc/rfc3986.txt> ;
+    ns1:SIO_000628 <https://www.ietf.org/rfc/rfc3986.txt> .
+
+<https://fair.healthinformationportal.eu/catalog/1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d/metrics/5d27e854a9e78eb3f663331cd47cdc13> ns1:SIO_000332 <https://www.wikidata.org/wiki/Q8777> ;
+    ns1:SIO_000628 <https://www.wikidata.org/wiki/Q8777> .
+
+<https://fair.healthinformationportal.eu/profile/a0949e72-4466-4d53-8900-9436d1049a4b> rdfs:label "Catalog Profile" .
