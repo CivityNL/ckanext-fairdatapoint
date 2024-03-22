@@ -2,7 +2,7 @@
 
 # ckanext-fairdatapoint
 
-CKAN extension for FAIR data points. Contains a harvester for FAIR data points. In the future, the FAIR data point API might be supported by this extension too. 
+CKAN harvester for [FAIR Data Point](https://www.fairdatapoint.org/). Contains a harvester for FAIR data points. In the future, the FAIR data point API might be supported by this extension too.
 
 ## Stages
 
@@ -23,7 +23,7 @@ To run the harvester from the command line:
 ckan --config=<full path to CKAN ini-file> harvester run-test <id of harvester>
 ``
 
-To rebuiod the index in case it is not automatically update after clearing all packages from a harvester:
+To rebuild the index in case it is not automatically update after clearing all packages from a harvester:
 
 ``
 ckan --config=<full path to CKAN ini-file> search-index rebuild
