@@ -1,5 +1,12 @@
-name: Tests
-on: [push, pull_request]
+# SPDX-FileCopyrightText: 2024 Stichting Health-RI
+# SPDX-FileContributor: 2024 PNED G.I.E.
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
+name: Run Tests
+
+on: push
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -7,19 +14,20 @@ jobs:
       # The CKAN version tag of the Solr and Postgres containers should match
       # the one of the container the tests run on.
       # You can switch this base image with a custom image tailored to your project
-      image: openknowledge/ckan-dev:2.10
+      image: ckan/ckan-dev:2.11-py3.10
+      options: --user root
     services:
       solr:
-        image: ckan/ckan-solr:2.10-solr9
+        image: ckan/ckan-solr:2.11-solr9
       postgres:
-        image: ckan/ckan-postgres-dev:2.10
+        image: ckan/ckan-postgres-dev:2.11
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
       redis:
-          image: redis:3
+        image: redis:8
 
     env:
       CKAN_SQLALCHEMY_URL: postgresql://ckan_default:pass@postgres/ckan_test
@@ -28,26 +36,59 @@ jobs:
       CKAN_SOLR_URL: http://solr:8983/solr/ckan
       CKAN_REDIS_URL: redis://redis:6379/1
 
+    permissions:
+      contents: read
+      packages: write
+
     steps:
-    - uses: actions/checkout@v2
-    - name: Install requirements
-      # Install any extra requirements your extension has here (dev requirements, other extensions etc)
-      run: |
-        pip install -r requirements.txt
-        pip install -r dev-requirements.txt
-        pip install --upgrade pytest-rerunfailures
-        pip install -e 'git+https://github.com/ckan/ckanext-scheming.git@release-3.0.0#egg=ckanext-scheming[requirements]'
-        pip install -e 'git+https://github.com/ckan/ckanext-harvest.git@v1.5.6#egg=ckanext-harvest[requirements]'
-        pip install -e 'git+https://github.com/ckan/ckanext-dcat.git@v1.5.1#egg=ckanext-dcat[requirements]'
-        pip install -r https://raw.githubusercontent.com/ckan/ckanext-dcat/v1.5.1/requirements.txt
-        python3 setup.py develop
-    - name: Setup extension
-      # Extra initialization steps
-      run: |
-        # Replace default path to CKAN core config file with the one on the container
-        sed -i -e 's/use = config:.*/use = config:\/srv\/app\/src\/ckan\/test-core.ini/' test.ini
+      - uses: actions/checkout@v5
+      - name: REUSE Compliance Check
+        uses: fsfe/reuse-action@v6
+      - name: Install requirements (common)
+        run: |
+          pip install -r requirements.txt
+          pip install -r dev-requirements.txt
+          pip install -e .
+      - name: Setup CKAN extensions (harvest, scheming, dcat, fluent)
+        run: |
+          # Harvest v1.6.1 from GitHub
+          git clone https://github.com/ckan/ckanext-harvest
+          cd ckanext-harvest
+          git checkout tags/v1.6.1
+          pip install -e .
+          pip install -r requirements.txt
+          cd ..
 
-        ckan -c test.ini db init
-    - name: Run tests
-      run: pytest --ckan-ini=test.ini --cov=ckanext.fairdatapoint --disable-warnings ckanext/fairdatapoint
+          # Scheming release 3.1.0
+          pip install -e 'git+https://github.com/ckan/ckanext-scheming.git@release-3.1.0#egg=ckanext-scheming[requirements]'
 
+          # DCAT extension for FAIR Data Point
+          pip install -e 'git+https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-dcat.git@v2.3.3#egg=ckanext-dcat'
+          if [ -f "${PIP_SRC}/ckanext-dcat/requirements.txt" ]; then
+            pip install -r "${PIP_SRC}/ckanext-dcat/requirements.txt"
+          fi
+
+          # Fluent extension
+          pip install -e 'git+https://github.com/ckan/ckanext-fluent.git#egg=ckanext-fluent'
+          if [ -f "${PIP_SRC}/ckanext-fluent/requirements.txt" ]; then
+            pip install -r "${PIP_SRC}/ckanext-fluent/requirements.txt"
+          fi
+      - name: Setup extension
+        run: |
+          sed -i -e 's/use = config:.*/use = config:\/srv\/app\/src\/ckan\/test-core.ini/' test.ini
+          ckan -c test.ini db init
+          ckan -c test.ini db pending-migrations --apply
+      - name: Run tests
+        run: |
+          pytest --ckan-ini=test.ini --cov=ckanext.fairdatapoint --disable-warnings ckanext/fairdatapoint
+      - name: Generate coverage report
+        run: |
+          coverage xml -o coverage.xml
+      - name: Install unzip
+        run: apt-get update && apt-get install -y unzip
+      - name: Sonar scan
+        uses: SonarSource/sonarqube-scan-action@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io

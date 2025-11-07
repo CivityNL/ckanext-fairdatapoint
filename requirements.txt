@@ -1,2 +1,7 @@
--e git+https://github.com/ckan/ckanext-harvest.git@v1.5.6#egg=ckanext-harvest[requirements]
--e git+https://github.com/ckan/ckanext-dcat.git@v1.5.1#egg=ckanext-dcat
+# SPDX-FileCopyrightText: 2024 Stichting Health-RI
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
+rdflib~=7.3.0
+setuptools~=80.9.0
+requests~=2.32.5

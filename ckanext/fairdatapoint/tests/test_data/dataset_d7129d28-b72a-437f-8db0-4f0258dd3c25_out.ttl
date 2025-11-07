@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 Stichting Health-RI
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix ldp: <http://www.w3.org/ns/ldp#> .
@@ -17,7 +21,6 @@
 <https://health-ri.sandbox.semlab-leiden.nl/dataset/d7129d28-b72a-437f-8db0-4f0258dd3c25> a dcat:Dataset,
         dcat:Resource ;
     rdfs:label "Example" ;
-    dcterms:accessRights <https://health-ri.sandbox.semlab-leiden.nl/dataset/d7129d28-b72a-437f-8db0-4f0258dd3c25#accessRights> ;
     dcterms:conformsTo <https://health-ri.sandbox.semlab-leiden.nl/profile/2f08228e-1789-40f8-84cd-28e3288c3604> ;
     dcterms:description "This is an example description." ;
     dcterms:isPartOf <https://health-ri.sandbox.semlab-leiden.nl/catalog/e3faf7ad-050c-475f-8ce4-da7e2faa5cd0> ;
@@ -30,9 +33,6 @@
     ns1:metadataIdentifier <https://health-ri.sandbox.semlab-leiden.nl/dataset/d7129d28-b72a-437f-8db0-4f0258dd3c25#identifier> ;
     ns1:metadataIssued "2023-09-05T12:00:36.276171+00:00"^^xsd:dateTime ;
     ns1:metadataModified "2023-09-05T12:03:28.843400+00:00"^^xsd:dateTime .
-
-<https://health-ri.sandbox.semlab-leiden.nl/dataset/d7129d28-b72a-437f-8db0-4f0258dd3c25#accessRights> a dcterms:RightsStatement ;
-    dcterms:description "This resource has no access restriction" .
 
 <https://health-ri.sandbox.semlab-leiden.nl/dataset/d7129d28-b72a-437f-8db0-4f0258dd3c25#identifier> a <http://purl.org/spar/datacite/Identifier> ;
     dcterms:identifier "https://health-ri.sandbox.semlab-leiden.nl/dataset/d7129d28-b72a-437f-8db0-4f0258dd3c25" .

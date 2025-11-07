@@ -1,0 +1,20 @@
+# SPDX-FileCopyrightText: 2024 Stichting Health-RI
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ldp: <http://www.w3.org/ns/ldp#> .
+
+<https://fdp.healthdata.nl/profile/2f08228e-1789-40f8-84cd-28e3288c3604> a <http://www.w3.org/ns/dx/prof/Profile>;
+  <http://www.w3.org/2000/01/rdf-schema#label> "Dataset Profile";
+  <http://www.w3.org/ns/dx/prof/isProfileOf> <https://fdp.healthdata.nl/profile/core>;
+  <http://www.w3.org/ns/dx/prof/hasResource> [ a <http://www.w3.org/ns/dx/prof/#ResourceDescriptor>;
+      <http://www.w3.org/2000/01/rdf-schema#label> "Dataset";
+      dcterms:format <https://w3id.org/mediatype/text/turtle>;
+      dcterms:conformsTo <https://www.w3.org/TR/shacl/>;
+      <http://www.w3.org/ns/dx/prof/hasRole> <http://www.w3.org/ns/dx/prof/role/Validation>;
+      <http://www.w3.org/ns/dx/prof/hasArtifact> <https://fdp.healthdata.nl/metadata-schemas/866d7fb8-5982-4215-9c7c-18d0ed1bd5f3>
+    ] .

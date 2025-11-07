@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2024 Stichting Health-RI
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
+@prefix ldp: <http://www.w3.org/ns/ldp#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+
+<http://example.com>
+    a ldp:Container ;
+    ldp:contains <http://example.com/catalog1> .
+
+<http://example.com/catalog1>
+    a dcat:Catalog, ldp:Container ;
+    ldp:contains <http://example.com/dataset1> ;
+    dcat:dataset <http://example.com/dataset1> .
+
+<http://example.com/dataset1>
+    a dcat:Dataset, ldp:Resource .
