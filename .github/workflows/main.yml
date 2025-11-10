@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: 2024 Stichting Health-RI
+# SPDX-FileContributor: 2024 PNED G.I.E.
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
+name: Publish and Deploy main
+
+on:
+    workflow_run:
+      workflows: ["Run Tests"]
+      branches: [main]
+      types:
+        - completed
+
+jobs:
+    ort:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        steps:
+            - uses: actions/checkout@v5
+            - uses: oss-review-toolkit/ort-ci-github-action@v1
+              with:
+                  allow-dynamic-versions: "true"
+                  fail-on: "issues"
+                  run: "cache-dependencies,cache-scan-results,labels,analyzer,evaluator,advisor,reporter,upload-results"

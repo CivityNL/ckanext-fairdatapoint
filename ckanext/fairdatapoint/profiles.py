@@ -1,91 +1,62 @@
-# File original (C) Civity
-# File modified by Stichting Health-RI in January 2024 to rename the dataset_fields variable and
-#  check for multiple-text fields in the schema
-# All changes are © Stichting Health-RI and are licensed under the AGPLv3 license
-
-from datetime import datetime
-import re
+# SPDX-FileCopyrightText: 2023 Civity
+# SPDX-FileContributor: 2024 Stichting Health-RI
+#
+# SPDX-License-Identifier: AGPL-3.0-only
 import json
 import logging
-
-from ckanext.dcat.profiles import EuropeanDCATAP2Profile
-from ckan.plugins import toolkit
-from ckan import model
-import dateutil.parser as dateparser
-from dateutil.parser import ParserError
+import re
+import urllib.parse
+from datetime import datetime, timezone
+from json import JSONDecodeError
 from typing import Dict, List
-from rdflib import URIRef
+
+import dateutil.parser as dateparser
+from ckan import model
+from ckan.plugins import toolkit
+from dateutil.parser import ParserError
+from rdflib import DCAT, DCTERMS, FOAF, Namespace, URIRef
+
+from ckanext.dcat.profiles import EuropeanHealthDCATAPProfile
+from ckanext.fairdatapoint.labels import PACKAGE_REPLACE_FIELDS, resolve_labels
 
 log = logging.getLogger(__name__)
 
+VCARD = Namespace("http://www.w3.org/2006/vcard/ns#")
 
-def _convert_extras_to_declared_schema_fields(dataset_dict: Dict) -> Dict:
-    """
-    Compares the extras dictionary with the declared schema.
-    Updates the declared schema fields with the values that match from the extras.
-    Remove the extras that are present on the declared schema.
-    :param dataset_dict:
-    :return: dataset_dict - Updated dataset_dict
-    """
-    # Use the correct dataset type, Defaults to 'dataset'
-    dataset_type = dataset_dict.get('type', 'dataset')
-    # Gets the full Schema definition of the correct dataset type
-    context = {'model': model, 'session': model.Session}
-    data_dict = {'type': dataset_type}
-    full_schema_dict = toolkit.get_action('scheming_dataset_schema_show')(context, data_dict)
-
-    dataset_fields = {x.get('field_name'): x.get('preset') for x in full_schema_dict.get('dataset_fields', [])}
-
-    # Populate the declared schema fields, if they are present in the extras
-    for extra_dict in dataset_dict.get('extras', []):
-        field_key = extra_dict.get('key')
-        field_value = extra_dict.get('value')
-        if field_key in dataset_fields:
-            preset = dataset_fields[field_key]
-            if preset == 'multiple_text' and field_value:
-                dataset_dict[field_key] = json.loads(field_value)
-            elif preset == 'date' and field_value:
-                dataset_dict[field_key] = convert_datetime_string(field_value)
-            else:
-                dataset_dict[field_key] = field_value
-
-    # Remove the extras that have been populated into the declared schema fields
-    dataset_dict['extras'] = [d for d in dataset_dict['extras'] if d.get('key') not in dataset_fields]
-
-    return dataset_dict
+WIKIDATA_DOMAINS = ["wikidata.org", "www.wikidata.org"]
 
 
 def validate_tags(values_list: List[Dict]) -> List:
     """
     Validates tags strings to contain allowed characters, replaces others with spaces
     """
-    illegal_pattern = re.compile('[^A-Za-z0-9\- _\.]')
+    illegal_pattern = re.compile("[^A-Za-z0-9\- _\.]")
     tags = []
     for item in values_list:
-        tag_value = item['name']
-        find_illegal = re.search(illegal_pattern, tag_value)
-        if find_illegal:
-            log.warning(f'Tag {tag_value} contains values other than alphanumeric characters, spaces, hyphens, '
-                        f'underscores or dots, they will be replaces with spaces')
-            tag = {'name': re.sub(illegal_pattern, ' ', tag_value)}
-            tags.append(tag)
+        tag_value = item["name"]
+        if len(tag_value) < 2:
+            log.warning(
+                f"Tag {tag_value} is shorter than 2 characters and will be removed"
+            )
+        elif len(tag_value) > 100:
+            log.warning(
+                f"Tag {tag_value} is longer than 100 characters and will be removed"
+            )
         else:
-            tags.append(item)
+            find_illegal = re.search(illegal_pattern, tag_value)
+            if find_illegal:
+                log.warning(
+                    f"Tag {tag_value} contains values other than alphanumeric characters, spaces, hyphens, "
+                    f"underscores or dots, they will be replaces with spaces"
+                )
+                tag = {"name": re.sub(illegal_pattern, " ", tag_value)}
+                tags.append(tag)
+            else:
+                tags.append(item)
     return tags
 
 
-def convert_datetime_string(date_value: str) -> datetime:
-    """
-    Converts datestrings (e.g. '2023-10-06T10:12:55.614000+00:00') to datetime class instance
-    """
-    try:
-        date_value = dateparser.parse(date_value)
-    except ParserError:
-        log.error('A date field string value can not be parsed to a date')
-    return date_value
-
-
-class FAIRDataPointDCATAPProfile(EuropeanDCATAP2Profile):
+class FAIRDataPointDCATAPProfile(EuropeanHealthDCATAPProfile):
     """
     An RDF profile for FAIR data points
     """
@@ -93,29 +64,83 @@ class FAIRDataPointDCATAPProfile(EuropeanDCATAP2Profile):
     def parse_dataset(self, dataset_dict: Dict, dataset_ref: URIRef) -> Dict:
         super(FAIRDataPointDCATAPProfile, self).parse_dataset(dataset_dict, dataset_ref)
 
-        dataset_dict = _convert_extras_to_declared_schema_fields(dataset_dict)
+        tags_translated = dataset_dict.get('tags_translated')
+        if isinstance(tags_translated, dict):
+            dataset_dict['tags_translated'] = self._sanitize_tags_translated(tags_translated)
 
-        dataset_dict['tags'] = validate_tags(dataset_dict['tags'])
+            default_lang_tags = dataset_dict['tags_translated'].get(self._default_lang) or next(
+                (values for values in dataset_dict['tags_translated'].values() if values),
+                []
+            )
+            dataset_dict['tags'] = [{'name': tag} for tag in default_lang_tags]
 
-        # Example of adding a field
-        # dataset_dict['extras'].append({'key': 'hello',
-        #                                'value': 'Hello from the FAIR data point profile. Use this function to do '
-        #                                         'FAIR data point specific stuff during the import stage'})
+        dataset_dict['tags'] = validate_tags(dataset_dict.get('tags', []))
+
+        dataset_dict = self._fix_wikidata_uris(dataset_dict, PACKAGE_REPLACE_FIELDS)
+
+        resolve_labels(dataset_dict)
 
         return dataset_dict
 
-    # def graph_from_dataset(self, dataset_dict, dataset_ref):
-    #
-    #     g = self.g
-    #
-    #     spatial_text = self._get_dataset_value(dataset_dict, 'hello')
-    #
-    #     if spatial_uri:
-    #         spatial_ref = URIRef(spatial_uri)
-    #     else:
-    #         spatial_ref = BNode()
-    #
-    #     if spatial_text:
-    #         g.add((dataset_ref, DCT.spatial, spatial_ref))
-    #         g.add((spatial_ref, RDF.type, DCT.Location))
-    #         g.add((spatial_ref, RDFS.label, Literal(spatial_text)))
+    def _sanitize_tags_translated(self, tags_translated: Dict[str, List[str]]) -> Dict[str, List[str]]:
+        """Remove invalid multilingual tags to satisfy CKAN length rules."""
+
+        sanitized: Dict[str, List[str]] = {}
+
+        for lang, values in tags_translated.items():
+            tag_dicts = [{'name': value} for value in values if value]
+            cleaned = validate_tags(tag_dicts)
+            sanitized[lang] = [tag['name'] for tag in cleaned]
+
+            if len(values) != len(sanitized[lang]):
+                removed_tags = [v for v in values if v not in sanitized[lang]]
+                log.warning(
+                    'Removed invalid tags for language %s during multilingual sanitation. Original: %r, Removed: %r',
+                    lang,
+                    values,
+                    removed_tags
+                )
+
+        return sanitized
+
+    @staticmethod
+    def _rewrite_wikidata_url(uri: str) -> str:
+        """This function fixes Wikidata URIs to use references instead of web URI
+
+        It is necessary to fix this for label resolving, as subject in the graph won't match
+        """
+        # URL
+        try:
+            parsed_url = urllib.parse.urlparse(uri)
+
+            if (
+                parsed_url.scheme.startswith("http")
+                and parsed_url.netloc in WIKIDATA_DOMAINS
+                and parsed_url.path.startswith("/wiki/")
+            ):
+                # Find the entity ID; which comes after the /wiki/ part of the URI
+                entity_id = parsed_url.path[len("/wiki/") :]
+                # Make sure it is an actualy valid entity ID, they always start with a letter,
+                # followed by numbers. See https://www.wikidata.org/wiki/Wikidata:Identifiers
+                # Items typically start with a Q, but let's stay flexible.
+                if re.fullmatch("[a-zA-Z]\d+", entity_id):
+                    # All conditions are met. We can rewrite the Wikidata url.
+                    new_url = f"http://www.wikidata.org/entity/{entity_id}"
+
+                    return new_url
+        except ValueError:
+            pass
+
+        return uri
+
+    def _fix_wikidata_uris(self, dataset_dict: dict, fields_list: list[str]):
+        for field in fields_list:
+            value = dataset_dict.get(field)
+            new_value = None
+            if value:
+                if isinstance(value, List):
+                    new_value = [self._rewrite_wikidata_url(uri) for uri in value]
+                else:
+                    new_value = self._rewrite_wikidata_url(value)
+                dataset_dict[field] = new_value
+        return dataset_dict

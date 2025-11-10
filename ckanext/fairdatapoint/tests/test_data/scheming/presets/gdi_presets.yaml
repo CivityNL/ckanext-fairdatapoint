@@ -1,0 +1,13 @@
+#SPDX-FileCopyrightText: 2024 Stichting Health-RI
+#
+#SPDX-License-Identifier: Apache-2.0
+
+scheming_version: 2
+about: GDI scheming field presets
+about_url: https://github.com/GenomicDataInfrastructure/gdi-userportal-ckanext-gdi-userportal/
+presets:
+  - preset_name: datetime_flex
+    values:
+      form_snippet: datetime.html
+      display_snippet: datetime.html
+      validators: scheming_isodatetime_flex convert_to_json_if_datetime

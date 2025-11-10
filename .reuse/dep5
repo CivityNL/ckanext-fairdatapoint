@@ -1,0 +1,23 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: ckanext-fairdatapoint
+Upstream-Contact: Stichting Health-RI <servicedesk@health-ri.nl>
+
+# Markdown documentation files with HTML comments
+Files: CHANGELOG.md CODE_OF_CONDUCT.md CONTRIBUTING.md
+Copyright: 2024 Stichting Health-RI
+License: CC-BY-4.0
+
+# Python requirements file
+Files: requirements.txt
+Copyright: 2024 Stichting Health-RI
+License: AGPL-3.0-only
+
+# Generated egg-info directory
+Files: ckanext_fairdatapoint.egg-info/*
+Copyright: 2024 Stichting Health-RI
+License: AGPL-3.0-only
+
+# License text files (not copyright holders)
+Files: LICENSES/*
+Copyright: Free Software Foundation
+License: CC0-1.0

@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 Stichting Health-RI
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix ns1: <http://semanticscience.org/resource/> .
@@ -22,9 +26,6 @@
     ns2:metadataIdentifier <https://health-ri.sandbox.semlab-leiden.nl/distribution/f9b9dff8-a039-4ca2-be9b-da72a61e3bac#identifier> ;
     ns2:metadataIssued "2023-09-05T12:03:28.782932+00:00"^^xsd:dateTime ;
     ns2:metadataModified "2023-09-05T12:03:28.782932+00:00"^^xsd:dateTime .
-
-<https://health-ri.sandbox.semlab-leiden.nl/distribution/f9b9dff8-a039-4ca2-be9b-da72a61e3bac#accessRights> a dcterms:RightsStatement ;
-    dcterms:description "This resource has no access restriction" .
 
 <https://health-ri.sandbox.semlab-leiden.nl/distribution/f9b9dff8-a039-4ca2-be9b-da72a61e3bac#identifier> a <http://purl.org/spar/datacite/Identifier> ;
     dcterms:identifier "https://health-ri.sandbox.semlab-leiden.nl/distribution/f9b9dff8-a039-4ca2-be9b-da72a61e3bac" .

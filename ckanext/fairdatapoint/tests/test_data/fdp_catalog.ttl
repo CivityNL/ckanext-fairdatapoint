@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 Stichting Health-RI
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
@@ -35,9 +39,6 @@
     ns2:metadataIdentifier <https://fair.healthinformationportal.eu/catalog/1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d#identifier> ;
     ns2:metadataIssued "2023-10-06T10:12:55.614000+00:00"^^xsd:dateTime ;
     ns2:metadataModified "2023-10-25T14:02:23.680000+00:00"^^xsd:dateTime .
-
-<https://fair.healthinformationportal.eu/catalog/1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d#accessRights> a dcterms:RightsStatement ;
-    dcterms:description "This resource has no access restriction" .
 
 <https://fair.healthinformationportal.eu/catalog/1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d#identifier> a <http://purl.org/spar/datacite/Identifier> ;
     dcterms:identifier "https://fair.healthinformationportal.eu/catalog/1c75c2c9-d2cc-44cb-aaa8-cf8c11515c8d" .

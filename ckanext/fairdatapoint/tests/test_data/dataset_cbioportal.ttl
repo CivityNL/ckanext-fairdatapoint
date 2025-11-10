@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 Stichting Health-RI
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix ldp: <http://www.w3.org/ns/ldp#> .
@@ -16,7 +20,6 @@
 <https://health-ri.sandbox.semlab-leiden.nl/dataset/d9956191-1aff-4181-ac8b-16b829135ed5> a dcat:Dataset,
         dcat:Resource ;
     rdfs:label "[PUBLIC] Low-Grade Gliomas (UCSF, Science 2014)" ;
-    dcterms:accessRights <https://health-ri.sandbox.semlab-leiden.nl/dataset/d9956191-1aff-4181-ac8b-16b829135ed5#accessRights> ;
     dcterms:conformsTo <https://health-ri.sandbox.semlab-leiden.nl/profile/2f08228e-1789-40f8-84cd-28e3288c3604> ;
     dcterms:description "Whole exome sequencing of 23 grade II glioma tumor/normal pairs." ;
     dcterms:identifier "lgg_ucsf_2014"^^xsd:token ;
@@ -40,9 +43,6 @@
     ns1:metadataIdentifier <https://health-ri.sandbox.semlab-leiden.nl/dataset/d9956191-1aff-4181-ac8b-16b829135ed5#identifier> ;
     ns1:metadataIssued "2024-01-22T12:58:04.249592+00:00"^^xsd:dateTime ;
     ns1:metadataModified "2024-01-22T12:58:05.109355+00:00"^^xsd:dateTime .
-
-<https://health-ri.sandbox.semlab-leiden.nl/dataset/d9956191-1aff-4181-ac8b-16b829135ed5#accessRights> a dcterms:RightsStatement ;
-    dcterms:description "This resource has no access restriction" .
 
 <https://health-ri.sandbox.semlab-leiden.nl/dataset/d9956191-1aff-4181-ac8b-16b829135ed5#identifier> a <http://purl.org/spar/datacite/Identifier> ;
     dcterms:identifier "https://health-ri.sandbox.semlab-leiden.nl/dataset/d9956191-1aff-4181-ac8b-16b829135ed5" .
